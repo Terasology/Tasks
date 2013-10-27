@@ -1,0 +1,9 @@
+{
+    "id" : "Questing",
+    "version" : "0.1.0",
+    "author" : "nh_99",
+    "displayName" : "Questing",
+    "description" : "A module to add questing features",
+    "dependencies" : [],
+    "isServerSideOnly" : false
+}
