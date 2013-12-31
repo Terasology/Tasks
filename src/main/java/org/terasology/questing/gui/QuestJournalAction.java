@@ -1,18 +1,34 @@
+/*
+ * Copyright 2013 MovingBlocks
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.terasology.questing.gui;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.terasology.entitySystem.EntityRef;
-import org.terasology.entitySystem.EventHandlerSystem;
-import org.terasology.entitySystem.ReceiveEvent;
-import org.terasology.entitySystem.RegisterComponentSystem;
-import org.terasology.events.ActivateEvent;
-import org.terasology.game.CoreRegistry;
+import org.terasology.engine.CoreRegistry;
+import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.event.ReceiveEvent;
+import org.terasology.entitySystem.systems.ComponentSystem;
+import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.manager.GUIManager;
 import org.terasology.questing.QuestingCardFetchSystem;
 
-@RegisterComponentSystem
-public class QuestJournalAction implements EventHandlerSystem {
+@RegisterSystem
+public class QuestJournalAction implements ComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(QuestJournalAction.class);
 
     @Override
@@ -22,17 +38,19 @@ public class QuestJournalAction implements EventHandlerSystem {
     }
 
     @Override
-    public void shutdown() {}
+    public void shutdown() {
+        // nothing to do
+    }
 
-    @ReceiveEvent(components = {QuestJournalComponent.class})
+    @ReceiveEvent(components = { QuestJournalComponent.class })
     public void onActivate(ActivateEvent event, EntityRef entity) {
         QuestJournalComponent questJournal = entity.getComponent(QuestJournalComponent.class);
 
-        if(questJournal != null) {
+        if (questJournal != null) {
             logger.info("Journal used.");
 
-            if(UIScreenQuest.qGoal != null && UIScreenQuest.qName != null) {
-                if(QuestingCardFetchSystem.questName != null && QuestingCardFetchSystem.friendlyGoal != null) {
+            if (UIScreenQuest.qGoal != null && UIScreenQuest.qName != null) {
+                if (QuestingCardFetchSystem.questName != null && QuestingCardFetchSystem.friendlyGoal != null) {
                     UIScreenQuest.qName.setText(QuestingCardFetchSystem.questName);
                     UIScreenQuest.qGoal.setText(QuestingCardFetchSystem.friendlyGoal);
                     logger.info("Questing info updated.");
@@ -41,7 +59,7 @@ public class QuestJournalAction implements EventHandlerSystem {
                     logger.info("There is no active quest, called as an update.");
                 }
             } else {
-                if(QuestingCardFetchSystem.questName != null) {
+                if (QuestingCardFetchSystem.questName != null) {
                     UIScreenQuest.questName = QuestingCardFetchSystem.questName;
                     UIScreenQuest.questGoal = QuestingCardFetchSystem.friendlyGoal;
                     logger.info("The quest infos were just set, for the first time.");
