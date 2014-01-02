@@ -1,9 +1,9 @@
 {
-    "id" : "Questing",
+    "id" : "Tasks",
     "version" : "0.1.0",
     "author" : "nh_99",
-    "displayName" : "Questing",
-    "description" : "A module to add questing features",
+    "displayName" : "Tasks",
+    "description" : "A module to add some gameplay features to the game, such as questing, achievements, and missions.",
     "dependencies" : [],
     "isServerSideOnly" : false
 }
