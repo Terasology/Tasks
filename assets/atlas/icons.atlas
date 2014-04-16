@@ -1,0 +1,14 @@
+{
+    "texture": "Tasks:icons",
+    "textureSize": [256, 256],
+    "grid": {
+        "tileSize": [64, 64],
+        "gridDimensions": [4, 4],
+        "tileNames": [
+            "ExclamationMark", "QuestionMark", "CheckMark", "CrossMark",
+            "Scroll", "Map", "Questing", "",
+            "", "", "", "",
+            "", "", "", ""
+        ]
+    }
+}
