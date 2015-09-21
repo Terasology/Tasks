@@ -16,31 +16,34 @@
 
 package org.terasology.tasks.systems;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.terasology.engine.CoreRegistry;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.EventPriority;
 import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.systems.ComponentSystem;
+import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryComponent;
 import org.terasology.logic.inventory.ItemComponent;
-import org.terasology.logic.inventory.events.ReceivedItemEvent;
-import org.terasology.logic.manager.GUIManager;
+import org.terasology.logic.inventory.events.InventorySlotChangedEvent;
+import org.terasology.registry.Share;
+import org.terasology.tasks.FetchQuest;
+import org.terasology.tasks.Quest;
 import org.terasology.tasks.components.QuestingCardFetchComponent;
 import org.terasology.tasks.events.ReachedBeaconEvent;
-import org.terasology.tasks.gui.UIScreenQuest;
-import org.terasology.tasks.utils.ModIcons;
+import org.terasology.world.block.BlockUri;
 
 /**
  * This controls the main logic of the quest, and defines what to do with a "quest card"
- * @author nh_99
  */
+@Share(QuestingCardFetchSystem.class)
 @RegisterSystem(RegisterMode.AUTHORITY)
-public class QuestingCardFetchSystem implements ComponentSystem {
+public class QuestingCardFetchSystem extends BaseComponentSystem {
     public static String friendlyGoal;
     public static String questName;
     public static String returnTo;
@@ -50,21 +53,16 @@ public class QuestingCardFetchSystem implements ComponentSystem {
     private static String goal;
     private static String amount;
     private static Integer currentAmount = 1;
-    private static boolean beaconReached;
+
+    private Quest quest = new FetchQuest(3, new BlockUri("core:dirt"), EntityRef.NULL);
 
     @Override
     public void initialise() {
-        ModIcons.loadIcons();
-    }
-
-    @Override
-    public void shutdown() {
-
     }
 
     @ReceiveEvent(components = {InventoryComponent.class}, priority = EventPriority.PRIORITY_HIGH)
-    public void onReceiveItem(ReceivedItemEvent event, EntityRef entity) {
-        ItemComponent item = event.getItem().getComponent(ItemComponent.class);
+    public void onReceiveItem(InventorySlotChangedEvent event, EntityRef entity) {
+        ItemComponent item = event.getNewItem().getComponent(ItemComponent.class);
 
         // Make sure we have a valid item
         if (item == null) {
@@ -82,14 +80,13 @@ public class QuestingCardFetchSystem implements ComponentSystem {
                     currentAmount += 1;
                 } else { //The quest may be done
                     if (returnTo != null) {
-                        UIScreenQuest.qGoal.setText("Return to " + returnTo);
+                        logger.info("Return to " + returnTo);
                     } else {
                         resetQuest();
 
-                        UIScreenQuest.qName.setText("Quest finished!");
-                        UIScreenQuest.qGoal.setText(" ");
+                        logger.info("Quest finished!");
 
-                        CoreRegistry.get(GUIManager.class).openWindow("journal");
+//                        CoreRegistry.get(GUIManager.class).openWindow("journal");
                     }
                 }
             }
@@ -101,10 +98,9 @@ public class QuestingCardFetchSystem implements ComponentSystem {
         if (event.getBeaconName().equals(returnTo)) {
             resetQuest();
 
-            UIScreenQuest.qName.setText("Quest finished!");
-            UIScreenQuest.qGoal.setText(" ");
+            logger.info("Quest finished!");
 
-            CoreRegistry.get(GUIManager.class).openWindow("journal");
+//            CoreRegistry.get(GUIManager.class).openWindow("journal");
         }
     }
 
@@ -147,5 +143,12 @@ public class QuestingCardFetchSystem implements ComponentSystem {
         friendlyGoal = friendlyQuestGoal;
         amount = amountToGet;
         returnTo = playerReturnTo;
+    }
+
+    /**
+     * @return
+     */
+    public List<Quest> getQuests() {
+        return Collections.singletonList(quest);
     }
 }

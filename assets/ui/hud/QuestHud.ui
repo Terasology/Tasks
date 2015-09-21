@@ -1,0 +1,32 @@
+{
+    "type": "QuestHud",
+    "contents": {
+        "type" : "relativeLayout",
+        "contents" : [
+            {
+                "type": "columnLayout",
+                "contents": [
+                    {
+                        "type": "UILabel",
+                        "id": "blockName",
+                        "text": "Quests"
+                    },
+                    {
+                        "type": "UIList",
+                        "id": "questList"
+                    }
+                ],
+                "layoutInfo" : {
+                    "use-content-width" : true,
+                    "use-content-height" : true,
+                    "position-left" : {
+                        "target" : "LEFT"
+                    },
+                    "position-top" : {
+                        "target" : "MIDDLE"
+                    }
+                }
+            }
+        ]
+    }
+}

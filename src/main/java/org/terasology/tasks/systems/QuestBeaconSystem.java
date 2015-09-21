@@ -18,29 +18,26 @@ package org.terasology.tasks.systems;
 
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.systems.*;
+import org.terasology.entitySystem.systems.BaseComponentSystem;
+import org.terasology.entitySystem.systems.RegisterMode;
+import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.physics.events.CollideEvent;
 import org.terasology.tasks.components.QuestBeaconComponent;
 import org.terasology.tasks.events.ReachedBeaconEvent;
 
 /**
  * This class is used for the quest beacons, to see where the player is in relation to the beacon.
- * @author nh_99
  */
 @RegisterSystem(RegisterMode.AUTHORITY)
-public class QuestBeaconSystem implements ComponentSystem {
-
-    @Override
-    public void initialise() { }
-
-    @Override
-    public void shutdown() { }
+public class QuestBeaconSystem extends BaseComponentSystem {
 
     @ReceiveEvent(components = QuestBeaconComponent.class)
     public void onCollision(CollideEvent event, EntityRef entity) {
-        event.getOtherEntity().send(new ReachedBeaconEvent(entity, event.getOtherEntity(),
-                entity.getComponent(QuestBeaconComponent.class).beaconName)); //Send the event
+        QuestBeaconComponent component = entity.getComponent(QuestBeaconComponent.class);
+        ReachedBeaconEvent response = new ReachedBeaconEvent(entity, event.getOtherEntity(), component.beaconName);
+        event.getOtherEntity().send(response); //Send the event
 
-        entity.removeComponent(QuestBeaconComponent.class); //Don't need this anymore, the beacon has been triggered!
+        // Don't need this anymore, the beacon has been triggered!
+        entity.removeComponent(QuestBeaconComponent.class);
     }
 }

@@ -16,30 +16,30 @@
 
 package org.terasology.tasks.systems;
 
-import org.terasology.engine.CoreRegistry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.systems.ComponentSystem;
+import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.logic.common.ActivateEvent;
-import org.terasology.logic.manager.GUIManager;
+import org.terasology.registry.CoreRegistry;
 import org.terasology.tasks.components.QuestJournalComponent;
-import org.terasology.tasks.gui.UIScreenQuest;
 
 /**
  * This class says what to do when someone uses the journal.
- * @author nh_99
  */
 @RegisterSystem(RegisterMode.CLIENT)
-public class QuestJournalAction implements ComponentSystem {
-    @Override
-    public void initialise() {
-        CoreRegistry.get(GUIManager.class).registerWindow("journal", UIScreenQuest.class);
-    }
+public class QuestJournalAction extends BaseComponentSystem {
+
+
+    private static final Logger logger = LoggerFactory.getLogger(QuestJournalAction.class);
 
     @Override
-    public void shutdown() { }
+    public void initialise() {
+//        CoreRegistry.get(GUIManager.class).registerWindow("journal", UIScreenQuest.class);
+    }
 
     /**
      * This is used for UI calls in the tasks journal.
@@ -49,30 +49,30 @@ public class QuestJournalAction implements ComponentSystem {
         QuestJournalComponent questJournal = entity.getComponent(QuestJournalComponent.class);
 
         if (questJournal != null) {
-            //logger.info("Journal used.");
+            logger.info("Journal used.");
 
-            if (UIScreenQuest.qGoal != null && UIScreenQuest.qName != null) {
-                if (QuestingCardFetchSystem.questName != null && QuestingCardFetchSystem.friendlyGoal != null) {
-                    //Update the tasks journal.
-                    UIScreenQuest.qName.setText(QuestingCardFetchSystem.questName);
-                    UIScreenQuest.qGoal.setText(QuestingCardFetchSystem.friendlyGoal);
-                    //logger.info("Questing info updated.");
-                } else {
-                    UIScreenQuest.qName.setText("Find a quest card and use it!");
-                    //logger.info("There is no active quest, called as an update.");
-                }
-            } else {
-                if (QuestingCardFetchSystem.questName != null) {
-                    UIScreenQuest.questName = QuestingCardFetchSystem.questName;
-                    UIScreenQuest.questGoal = QuestingCardFetchSystem.friendlyGoal;
-                    //logger.info("The quest infos were just set, for the first time.");
-                } else {
-                    UIScreenQuest.questName = "Find a quest card and use it!";
-                    //logger.info("There is no active quest, and this was just set for the first time.");
-                }
-            }
-
-            CoreRegistry.get(GUIManager.class).openWindow("journal");
+//            if (UIScreenQuest.qGoal != null && UIScreenQuest.qName != null) {
+//                if (QuestingCardFetchSystem.questName != null && QuestingCardFetchSystem.friendlyGoal != null) {
+//                    //Update the tasks journal.
+//                    UIScreenQuest.qName.setText(QuestingCardFetchSystem.questName);
+//                    UIScreenQuest.qGoal.setText(QuestingCardFetchSystem.friendlyGoal);
+//                    //logger.info("Questing info updated.");
+//                } else {
+//                    UIScreenQuest.qName.setText("Find a quest card and use it!");
+//                    //logger.info("There is no active quest, called as an update.");
+//                }
+//            } else {
+//                if (QuestingCardFetchSystem.questName != null) {
+//                    UIScreenQuest.questName = QuestingCardFetchSystem.questName;
+//                    UIScreenQuest.questGoal = QuestingCardFetchSystem.friendlyGoal;
+//                    //logger.info("The quest infos were just set, for the first time.");
+//                } else {
+//                    UIScreenQuest.questName = "Find a quest card and use it!";
+//                    //logger.info("There is no active quest, and this was just set for the first time.");
+//                }
+//            }
+//
+//            CoreRegistry.get(GUIManager.class).openWindow("journal");
         }
     }
 }
