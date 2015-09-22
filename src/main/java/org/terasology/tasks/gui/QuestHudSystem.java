@@ -15,6 +15,8 @@
  */
 package org.terasology.tasks.gui;
 
+import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
@@ -30,10 +32,19 @@ public class QuestHudSystem extends BaseComponentSystem {
     @In
     private NUIManager nuiManager;
 
+    private QuestHud questHud;
+
     @Override
     public void initialise() {
-        Rect2f rc = Rect2f.createFromMinAndSize(0, 0, 0.5f, 1);
-        nuiManager.getHUD().addHUDElement(HUD_ELEMENT_ID, QuestHud.class, rc);
+        Rect2f rc = Rect2f.createFromMinAndSize(0, 0, 1, 1);
+        questHud = nuiManager.getHUD().addHUDElement(HUD_ELEMENT_ID, QuestHud.class, rc);
     }
 
+    @ReceiveEvent
+    public void onToggleMinimapButton(ToggleQuestsButton event, EntityRef entity) {
+        if (event.isDown()) {
+            questHud.setVisible(!questHud.isVisible());
+            event.consume();
+        }
+    }
 }

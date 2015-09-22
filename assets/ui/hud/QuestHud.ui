@@ -5,7 +5,7 @@
         "contents" : [
             {
                 "type": "columnLayout",
-                "skin": "framed",
+                "skin": "quests",
                 "contents": [
                     {
                         "type": "UILabel",
@@ -18,8 +18,8 @@
                     }
                 ],
                 "layoutInfo" : {
-                    "use-content-width" : true,
                     "use-content-height" : true,
+                    "use-content-width" : true,
                     "position-left" : {
                         "target" : "LEFT"
                     },

@@ -48,7 +48,7 @@ public class TimeConstraintTask implements Task {
 
     @Override
     public String getDescription() {
-        return String.format("Complete all tasks until %.2f. Now: %.2f", targetTime, time.getGameTime());
+        return String.format("Complete all tasks within %.0f seconds.", targetTime - time.getGameTime());
     }
 
     @Override

@@ -44,21 +44,26 @@ public class QuestRenderer extends AbstractItemRenderer<Quest> {
     @Override
     public void draw(Quest quest, Canvas canvas) {
         Font font = canvas.getCurrentStyle().getFont();
+        int lineHeight = font.getLineHeight();
+
         String title = getTitle(quest);
         int width = font.getWidth(title);
         canvas.drawText(title);
-        Rect2i questIconRect = Rect2i.createFromMinAndSize(width + 4, 0, 32, 32);
+
+        Rect2i questIconRect = Rect2i.createFromMinAndSize(width + 4, 0, lineHeight, lineHeight);
         TextureRegion questIcon = getIcon(quest.getStatus());
         canvas.drawTexture(questIcon, questIconRect);
 
-        int y = 0;
-        int lineHeight = font.getLineHeight();
+        int y = lineHeight;
         for (Task task : quest.getAllTasks()) {
-            String taskText = getTaskText(task);
-            width = font.getWidth(taskText);
-            Rect2i taskTextRect = Rect2i.createFromMinAndSize(0, y, width, lineHeight);
+            String taskText = "+ " + getTaskText(task);
+            List<String> lines = TextLineBuilder.getLines(font, taskText, maxWidth);
+            Rect2i taskTextRect = Rect2i.createFromMinAndSize(0, y, maxWidth, canvas.getRegion().height() - y);
             canvas.drawText(taskText, taskTextRect);
-            Rect2i taskIconRect = Rect2i.createFromMinAndSize(width + 4, 0, lineHeight, lineHeight);
+
+            String ll = lines.get(lines.size() - 1);
+            y += lineHeight * (lines.size() - 1);
+            Rect2i taskIconRect = Rect2i.createFromMinAndSize(font.getWidth(ll) + 4, y, lineHeight, lineHeight);
             canvas.drawTexture(getIcon(task.getStatus()), taskIconRect);
             y += lineHeight;
         }

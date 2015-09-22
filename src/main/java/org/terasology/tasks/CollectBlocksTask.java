@@ -16,7 +16,6 @@
 
 package org.terasology.tasks;
 
-import org.terasology.logic.inventory.ItemComponent;
 import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
 
 public class CollectBlocksTask implements Task {
@@ -50,7 +49,7 @@ public class CollectBlocksTask implements Task {
 
     @Override
     public String getDescription() {
-        return String.format("Fetch %d blocks of %s and return them to %s", targetAmount, itemId, targetBeaconName);
+        return String.format("Fetched %d/%d blocks of %s and return them to %s", amount, targetAmount, itemId, targetBeaconName);
     }
 
     public String getItemId() {

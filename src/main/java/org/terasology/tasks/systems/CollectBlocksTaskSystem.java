@@ -38,14 +38,13 @@ import org.terasology.tasks.events.TaskCompleteEvent;
  *
  */
 @RegisterSystem(RegisterMode.AUTHORITY)
-public class CollectBlocksTaskSystem extends BaseComponentSystem
-{
+public class CollectBlocksTaskSystem extends BaseComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(CollectBlocksTaskSystem.class);
 
     @In
     private QuestSystem questSystem;
 
-    @ReceiveEvent(components = {InventoryComponent.class}, priority = EventPriority.PRIORITY_HIGH)
+    @ReceiveEvent(components = {InventoryComponent.class})
     public void onReceiveItem(InventorySlotChangedEvent event, EntityRef entity) {
         ItemComponent newItem = event.getNewItem().getComponent(ItemComponent.class);
         ItemComponent oldItem = event.getOldItem().getComponent(ItemComponent.class);
