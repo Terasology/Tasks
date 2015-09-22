@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 MovingBlocks
+ * Copyright 2015 MovingBlocks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,21 @@
  * limitations under the License.
  */
 
-package org.terasology.tasks.components;
+package org.terasology.tasks;
 
-import org.terasology.entitySystem.Component;
+import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
 
-public class QuestBeaconComponent implements Component {
-    public String beaconName;
+public interface Task {
+
+    String getShortName();
+
+    String getDescription();
+
+    /**
+     * An optional icon
+     * @return the icon or <code>null</code>
+     */
+    ItemIcon getIcon();
+
+    Status getStatus();
 }

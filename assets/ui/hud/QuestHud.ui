@@ -5,10 +5,11 @@
         "contents" : [
             {
                 "type": "columnLayout",
+                "skin": "framed",
                 "contents": [
                     {
                         "type": "UILabel",
-                        "id": "blockName",
+                        "id": "listTitle",
                         "text": "Quests"
                     },
                     {

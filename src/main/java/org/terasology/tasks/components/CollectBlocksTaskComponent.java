@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 MovingBlocks
+ * Copyright 2013 MovingBlocks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,16 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.tasks;
 
-import org.terasology.rendering.nui.itemRendering.StringTextRenderer;
+package org.terasology.tasks.components;
 
-public class QuestRenderer extends StringTextRenderer<Quest> {
+import org.terasology.entitySystem.Component;
 
-    @Override
-    public String getString(Quest value) {
-        return String.format("%s: %s", value.getShortName(), value.getStatus());
-    }
+public class CollectBlocksTaskComponent implements Component {
+    public String itemId;
+
+    public String targetEntity;
+
+    public int amount;
 }
-
-

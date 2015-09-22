@@ -16,11 +16,24 @@
 
 package org.terasology.tasks;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public interface Quest {
 
     String getShortName();
-    
+
     String getDescription();
-    
-    QuestStatus getStatus();
+
+    List<Task> getAllTasks();
+
+    @SuppressWarnings("unchecked")
+    default <T extends Task> List<T> getTasks(Class<T> type) {
+        return (List<T>) getAllTasks().stream().filter(type::isInstance).collect(Collectors.toList());
+    }
+
+    /**
+     * @return the status of the quest as a whole
+     */
+    Status getStatus();
 }

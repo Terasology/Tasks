@@ -14,34 +14,39 @@
  * limitations under the License.
  */
 
-package org.terasology.tasks;
+package org.terasology.tasks.events;
 
-public enum QuestStatus {
+import org.terasology.entitySystem.event.Event;
+import org.terasology.tasks.Quest;
 
-    QUEUED(false, false, false),
-    PENDING(true, false, false),
-    SUCCEEDED(true, true, true),
-    FAILED(true, true, false);
+/**
+ *
+ */
+public class QuestCompleteEvent implements Event {
 
-    private final boolean available;
-    private final boolean complete;
     private final boolean success;
+    private final Quest quest;
 
-    QuestStatus(boolean available, boolean complete, boolean success) {
-        this.available = available;
-        this.complete = complete;
+    /**
+     * @param quest the quest the task is part of
+     * @param success true if successfully completed, false otherwise
+     */
+    public QuestCompleteEvent(Quest quest, boolean success) {
+        this.quest = quest;
         this.success = success;
     }
 
-    boolean isComplete() {
-        return complete;
+    /**
+     * @return the quest the completed quest
+     */
+    public Quest getQuest() {
+        return quest;
     }
 
-    boolean isAvailable() {
-        return available;
-    }
-
-    boolean isSuccess() {
+    /**
+     * @return true if successfully completed, false otherwise
+     */
+    public boolean isSuccess() {
         return success;
     }
 }

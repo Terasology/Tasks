@@ -18,6 +18,7 @@ package org.terasology.tasks.components;
 
 import org.terasology.entitySystem.Component;
 
-public class QuestJournalComponent implements Component {
-    public String journalName;
+public class QuestComponent implements Component {
+    public String shortName;
+    public String description;
 }

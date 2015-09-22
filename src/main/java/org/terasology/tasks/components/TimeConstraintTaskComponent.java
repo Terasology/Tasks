@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 MovingBlocks
+ * Copyright 2015 MovingBlocks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,21 +17,10 @@
 package org.terasology.tasks.components;
 
 import org.terasology.entitySystem.Component;
-import org.terasology.network.Replicate;
 
-public class QuestingCardFetchComponent implements Component {
-    @Replicate
-    public String questName;
-
-    @Replicate
-    public String goal;
-
-    @Replicate
-    public String friendlyGoal;
-
-    @Replicate
-    public String amount;
-
-    @Replicate
-    public String returnTo;
+public class TimeConstraintTaskComponent implements Component {
+    /**
+     * Game time, in seconds.
+     */
+    public float targetTime;
 }
