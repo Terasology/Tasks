@@ -18,19 +18,16 @@ package org.terasology.tasks;
 
 import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
 
-public class CollectBlocksTask implements Task {
+public class GoToBeaconTask implements Task {
 
-    private final int targetAmount;
-    private final String itemId;
+    private final String targetBeaconName;
 
     private final ItemIcon icon = new ItemIcon();
 
-    private int amount;
+    private boolean targetReached;
 
-    public CollectBlocksTask(int amount, String itemId, String targetBeaconName) {
-        this.targetAmount = amount;
-        this.itemId = itemId;
-        this.icon.setQuantity(targetAmount);
+    public GoToBeaconTask(String targetBeaconName) {
+        this.targetBeaconName = targetBeaconName;
 //        this.icon.setIcon(entity.getComponent(ItemComponent.class).icon);
     }
 
@@ -41,35 +38,31 @@ public class CollectBlocksTask implements Task {
 
     @Override
     public String getShortName() {
-        return "Fetch Blocks";
+        return "Go to Beacon";
     }
 
     @Override
     public String getDescription() {
-        return String.format("Fetch %d blocks of %s - Currently %d", targetAmount, itemId, amount);
+        return String.format("Go to %s", targetBeaconName);
     }
 
-    public String getItemId() {
-        return itemId;
+    public String getTargetBeaconName() {
+        return targetBeaconName;
     }
 
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
-
-    public int getAmount() {
-        return amount;
+    public void targetReached() {
+        targetReached = true;
     }
 
     @Override
     public Status getStatus() {
         // it is not possible to fail this task
-        return (amount >= targetAmount) ? Status.SUCCEEDED : Status.ACTIVE;
+        return targetReached ? Status.SUCCEEDED : Status.ACTIVE;
     }
 
     @Override
     public String toString() {
-        return String.format("CollectBlocksTask [%d/%d %s]", amount, targetAmount, itemId);
+        return String.format("GoToBeaconTask [%s]", targetBeaconName);
     }
 }
 

@@ -15,9 +15,11 @@
     "CollectBlocksTask" : {
         "itemId" : "block:core:Dirt",
         "amount" : 3,
+    },
+    "GoToBeaconTask" : {
         "targetEntity" : "testertron5000"
     },
     "TimeConstraintTask" : {
-        "targetTime" : 5400
+        "targetTime" : 300
     }
 }

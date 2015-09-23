@@ -17,6 +17,7 @@
 package org.terasology.tasks;
 
 import org.terasology.engine.Time;
+import org.terasology.math.TeraMath;
 import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
 
 /**
@@ -48,7 +49,9 @@ public class TimeConstraintTask implements Task {
 
     @Override
     public String getDescription() {
-        return String.format("Complete all tasks within %.0f seconds.", targetTime - time.getGameTime());
+        int timeLeft = TeraMath.floorToInt(targetTime - time.getGameTime());
+        String timeText = DurationFormat.SHORT.format(timeLeft);
+        return String.format("Complete all tasks within %s", timeText);
     }
 
     @Override

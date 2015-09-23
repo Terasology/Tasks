@@ -16,11 +16,8 @@
 
 package org.terasology.tasks.components;
 
-import java.util.Map;
-
 import org.terasology.entitySystem.Component;
 
-public class QuestComponent implements Component {
-    public String shortName;
-    public String description;
+public class GoToBeaconTaskComponent implements Component {
+    public String targetBeacon;
 }

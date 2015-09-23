@@ -35,11 +35,13 @@ import org.terasology.registry.In;
 import org.terasology.registry.Share;
 import org.terasology.tasks.CollectBlocksTask;
 import org.terasology.tasks.DefaultQuest;
+import org.terasology.tasks.GoToBeaconTask;
 import org.terasology.tasks.Quest;
 import org.terasology.tasks.Status;
 import org.terasology.tasks.Task;
 import org.terasology.tasks.TimeConstraintTask;
 import org.terasology.tasks.components.CollectBlocksTaskComponent;
+import org.terasology.tasks.components.GoToBeaconTaskComponent;
 import org.terasology.tasks.components.QuestComponent;
 import org.terasology.tasks.components.TimeConstraintTaskComponent;
 import org.terasology.tasks.events.QuestCompleteEvent;
@@ -77,6 +79,10 @@ public class QuestSystem extends BaseComponentSystem {
         TimeConstraintTaskComponent tct = entity.getComponent(TimeConstraintTaskComponent.class);
         if (tct != null) {
             tasks.add(new TimeConstraintTask(time, tct.targetTime));
+        }
+        GoToBeaconTaskComponent gtbt = entity.getComponent(GoToBeaconTaskComponent.class);
+        if (tct != null) {
+            tasks.add(new GoToBeaconTask(gtbt.targetBeacon));
         }
 
         quests.add(new DefaultQuest(questComp.shortName, questComp.description, tasks));
