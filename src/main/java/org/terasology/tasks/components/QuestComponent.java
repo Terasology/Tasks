@@ -16,11 +16,12 @@
 
 package org.terasology.tasks.components;
 
-import java.util.Map;
+import java.util.List;
 
 import org.terasology.entitySystem.Component;
 
 public class QuestComponent implements Component {
     public String shortName;
     public String description;
+    public List<TaskElement> tasks;
 }

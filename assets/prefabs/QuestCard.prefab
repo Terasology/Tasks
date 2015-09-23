@@ -10,16 +10,30 @@
     },
     "Quest" : {
         "shortName" : "TestQuest",
-        "description" : "Test this quest!"
-    },
-    "CollectBlocksTask" : {
-        "itemId" : "block:core:Dirt",
-        "amount" : 3,
-    },
-    "GoToBeaconTask" : {
-        "targetEntity" : "testertron5000"
-    },
-    "TimeConstraintTask" : {
-        "targetTime" : 300
+        "description" : "Test this quest!",
+        "tasks" : [
+            {
+                "id" : "collectDirt",
+                "type" : "CollectBlocksTask",
+                "data" : {
+                    "itemId" : "block:core:Dirt",
+                    "amount" : 3
+                }
+            },
+            {
+                "id" : "returnHome",
+                "type" : "GoToBeaconTask",
+                "dependsOn" : ["collectDirt"],
+                "data" : {
+                    "targetEntity" : "testertron5000"
+                }
+            },
+            {
+                "type" : "TimeConstraintTask",
+                "data" : {
+                    "targetTime" : 300
+                }
+            }
+        ]
     }
 }

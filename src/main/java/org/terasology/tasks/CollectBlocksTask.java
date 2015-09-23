@@ -27,7 +27,7 @@ public class CollectBlocksTask implements Task {
 
     private int amount;
 
-    public CollectBlocksTask(int amount, String itemId, String targetBeaconName) {
+    public CollectBlocksTask(int amount, String itemId) {
         this.targetAmount = amount;
         this.itemId = itemId;
         this.icon.setQuantity(targetAmount);
