@@ -25,6 +25,6 @@ import org.terasology.input.RegisterBindButton;
  * @author mkienenb
  */
 @RegisterBindButton(id = "toggleQuests", description = "Open/Close Quest HUD")
-@DefaultBinding(type = InputType.KEY, id = Keyboard.KeyId.U)
+@DefaultBinding(type = InputType.KEY, id = Keyboard.KeyId.K)
 public class ToggleQuestsButton extends BindButtonEvent {
 }

@@ -34,7 +34,7 @@ public class TimeConstraintTask implements Task {
      */
     public TimeConstraintTask(Time time, float targetTime) {
         this.time = time;
-        this.targetTime = targetTime;
+        this.targetTime = time.getGameTime() + targetTime;
     }
 
     @Override

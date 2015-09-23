@@ -40,7 +40,7 @@ public class CollectBlocksTaskSystem extends BaseComponentSystem {
     @In
     private QuestSystem questSystem;
 
-    @ReceiveEvent(components = {InventoryComponent.class, InventoryComponent.class})
+    @ReceiveEvent(components = {InventoryComponent.class})
     public void onInventoryChange(InventorySlotStackSizeChangedEvent event, EntityRef entity) {
         InventoryComponent inventory = entity.getComponent(InventoryComponent.class);
         EntityRef itemRef = inventory.itemSlots.get(event.getSlot());
