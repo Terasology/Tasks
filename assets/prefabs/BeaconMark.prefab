@@ -1,0 +1,22 @@
+{
+    "mesh" : {
+        "mesh" : "ExclamationMark",
+        "material" : "ExclamationMark",
+        "color" : [255, 255, 20, 255]
+    },
+    "Location" : {},
+    "AnimateRotation": {
+      "yawSpeed": 0.5,
+      "isSynchronized": false
+    },
+    "QuestBeacon" : {
+        "beaconName" : "testertron5000"
+    },
+    "Trigger" : {
+        "detectGroups" : ["engine:sensor"]
+    },
+    "CylinderShape" : {
+        "radius" : 2,
+        "height" : 5
+    }
+}
