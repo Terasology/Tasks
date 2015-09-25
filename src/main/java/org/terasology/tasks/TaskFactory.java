@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 MovingBlocks
+ * Copyright 2015 MovingBlocks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package org.terasology.tasks.components;
+package org.terasology.tasks;
 
-import org.terasology.entitySystem.Component;
+import org.terasology.tasks.components.TaskElement;
 
-public class CollectBlocksTaskComponent implements Component {
-    public String itemId;
+import com.google.gson.JsonObject;
 
-    public String targetEntity;
+/**
+ *
+ */
+public interface TaskFactory<T extends Task> {
 
-    public int amount;
+    public boolean matches(String id);
+
+    public T newInstance(JsonObject data);
 }

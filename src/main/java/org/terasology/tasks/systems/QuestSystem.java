@@ -33,21 +33,22 @@ import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
+import org.terasology.tasks.AbstractTaskFactory;
 import org.terasology.tasks.CollectBlocksTask;
 import org.terasology.tasks.DefaultQuest;
 import org.terasology.tasks.GoToBeaconTask;
 import org.terasology.tasks.Quest;
 import org.terasology.tasks.Status;
 import org.terasology.tasks.Task;
+import org.terasology.tasks.TaskFactory;
 import org.terasology.tasks.TimeConstraintTask;
-import org.terasology.tasks.components.CollectBlocksTaskComponent;
-import org.terasology.tasks.components.GoToBeaconTaskComponent;
 import org.terasology.tasks.components.QuestComponent;
-import org.terasology.tasks.components.TimeConstraintTaskComponent;
+import org.terasology.tasks.components.TaskElement;
 import org.terasology.tasks.events.QuestCompleteEvent;
 import org.terasology.tasks.events.TaskCompleteEvent;
 
 import com.google.common.collect.Collections2;
+import com.google.gson.JsonObject;
 
 /**
  * This controls the main logic of the quest, and defines what to do with a "quest card"
@@ -71,18 +72,14 @@ public class QuestSystem extends BaseComponentSystem {
     @ReceiveEvent(components = {QuestComponent.class})
     public void onActivate(ActivateEvent event, EntityRef entity) {
         QuestComponent questComp = entity.getComponent(QuestComponent.class);
+        List<TaskFactory<?>> factories = createTaskFactories();
         List<Task> tasks = new ArrayList<>();
-        CollectBlocksTaskComponent cbtc = entity.getComponent(CollectBlocksTaskComponent.class);
-        if (cbtc != null) {
-            tasks.add(new CollectBlocksTask(cbtc.amount, cbtc.itemId, cbtc.targetEntity));
-        }
-        TimeConstraintTaskComponent tct = entity.getComponent(TimeConstraintTaskComponent.class);
-        if (tct != null) {
-            tasks.add(new TimeConstraintTask(time, tct.targetTime));
-        }
-        GoToBeaconTaskComponent gtbt = entity.getComponent(GoToBeaconTaskComponent.class);
-        if (tct != null) {
-            tasks.add(new GoToBeaconTask(gtbt.targetBeacon));
+        for (TaskElement ele : questComp.tasks) {
+            for (TaskFactory<?> factory : factories) {
+                if (factory.matches(ele.type)) {
+                    tasks.add(factory.newInstance(ele.data));
+                }
+            }
         }
 
         quests.add(new DefaultQuest(questComp.shortName, questComp.description, tasks));
@@ -141,5 +138,39 @@ public class QuestSystem extends BaseComponentSystem {
      */
     void finishQuest(Quest quest, boolean success) {
         quests.remove(quest);
+    }
+
+    private List<TaskFactory<?>> createTaskFactories() {
+
+        List<TaskFactory<?>> factories = new ArrayList<>();
+        factories.add(new AbstractTaskFactory<CollectBlocksTask>("CollectBlocksTask") {
+
+            @Override
+            public CollectBlocksTask newInstance(JsonObject data) {
+                return new CollectBlocksTask(
+                        data.get("amount").getAsInt(),
+                        data.get("itemId").getAsString());
+            }
+        });
+
+        factories.add(new AbstractTaskFactory<TimeConstraintTask>("TimeConstraintTask") {
+
+            @Override
+            public TimeConstraintTask newInstance(JsonObject data) {
+                return new TimeConstraintTask(time,
+                        data.get("targetTime").getAsFloat());
+            }
+        });
+
+        factories.add(new AbstractTaskFactory<GoToBeaconTask>("GoToBeaconTask") {
+
+            @Override
+            public GoToBeaconTask newInstance(JsonObject data) {
+                return new GoToBeaconTask(
+                        data.get("targetBeacon").getAsString());
+            }
+        });
+
+        return factories;
     }
 }

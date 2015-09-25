@@ -14,13 +14,20 @@
  * limitations under the License.
  */
 
-package org.terasology.tasks.components;
+package org.terasology.tasks;
 
-import org.terasology.entitySystem.Component;
+/**
+ *
+ */
+public abstract class AbstractTaskFactory<T extends Task> implements TaskFactory<T> {
 
-public class TimeConstraintTaskComponent implements Component {
-    /**
-     * Game time, in seconds.
-     */
-    public float targetTime;
+    private final String id;
+
+    public AbstractTaskFactory(String id) {
+        this.id = id;
+    }
+
+    public boolean matches(String id) {
+        return this.id.equals(id);
+    }
 }
