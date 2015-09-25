@@ -1,6 +1,7 @@
 # Blender v2.75 (sub 0) OBJ File: ''
 # www.blender.org
-o exclamationmark
+mtllib exclamationmark.mtl
+o main
 v 0.460938 -2.460938 0.400000
 v 0.266016 -2.330860 0.400000
 v 0.580469 -2.671485 0.400000

@@ -4,7 +4,9 @@
         "material" : "ExclamationMark",
         "color" : [255, 255, 20, 255]
     },
-    "Location" : {},
+    "Location" : {
+        "scale" : 0.2
+    },
     "AnimateRotation": {
       "yawSpeed": 0.5,
       "isSynchronized": false
