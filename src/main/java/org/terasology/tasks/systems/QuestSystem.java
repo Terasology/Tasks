@@ -31,6 +31,7 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.logic.common.ActivateEvent;
+import org.terasology.persistence.typeHandling.PersistedDataMap;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
 import org.terasology.tasks.AbstractTaskFactory;
@@ -77,7 +78,7 @@ public class QuestSystem extends BaseComponentSystem {
         for (TaskElement ele : questComp.tasks) {
             for (TaskFactory<?> factory : factories) {
                 if (factory.matches(ele.type)) {
-                    tasks.add(factory.newInstance(ele.data));
+                    tasks.add(factory.newInstance(ele.data.getData().getAsValueMap()));
                 }
             }
         }
@@ -146,9 +147,9 @@ public class QuestSystem extends BaseComponentSystem {
         factories.add(new AbstractTaskFactory<CollectBlocksTask>("CollectBlocksTask") {
 
             @Override
-            public CollectBlocksTask newInstance(JsonObject data) {
+            public CollectBlocksTask newInstance(PersistedDataMap data) {
                 return new CollectBlocksTask(
-                        data.get("amount").getAsInt(),
+                        data.get("amount").getAsInteger(),
                         data.get("itemId").getAsString());
             }
         });
@@ -156,7 +157,7 @@ public class QuestSystem extends BaseComponentSystem {
         factories.add(new AbstractTaskFactory<TimeConstraintTask>("TimeConstraintTask") {
 
             @Override
-            public TimeConstraintTask newInstance(JsonObject data) {
+            public TimeConstraintTask newInstance(PersistedDataMap data) {
                 return new TimeConstraintTask(time,
                         data.get("targetTime").getAsFloat());
             }
@@ -165,7 +166,7 @@ public class QuestSystem extends BaseComponentSystem {
         factories.add(new AbstractTaskFactory<GoToBeaconTask>("GoToBeaconTask") {
 
             @Override
-            public GoToBeaconTask newInstance(JsonObject data) {
+            public GoToBeaconTask newInstance(PersistedDataMap data) {
                 return new GoToBeaconTask(
                         data.get("targetBeacon").getAsString());
             }

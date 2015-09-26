@@ -25,7 +25,7 @@
                 "type" : "GoToBeaconTask",
                 "dependsOn" : ["collectDirt"],
                 "data" : {
-                    "targetEntity" : "testertron5000"
+                    "targetBeacon" : "testertron5000"
                 }
             },
             {

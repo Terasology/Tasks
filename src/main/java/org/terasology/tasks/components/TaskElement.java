@@ -18,14 +18,16 @@ package org.terasology.tasks.components;
 
 import java.util.List;
 
-import com.google.gson.JsonObject;
+import org.terasology.persistence.GenericObject;
+import org.terasology.reflection.MappedContainer;
 
 /**
  *
  */
+@MappedContainer
 public class TaskElement {
     public String id;
     public String type;
-    public JsonObject data;
+    public GenericObject data;
     public List<String> dependsOn;
 }

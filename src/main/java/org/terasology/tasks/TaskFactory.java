@@ -16,16 +16,14 @@
 
 package org.terasology.tasks;
 
-import org.terasology.tasks.components.TaskElement;
-
-import com.google.gson.JsonObject;
+import org.terasology.persistence.typeHandling.PersistedDataMap;
 
 /**
  *
  */
 public interface TaskFactory<T extends Task> {
 
-    public boolean matches(String id);
+    boolean matches(String id);
 
-    public T newInstance(JsonObject data);
+    T newInstance(PersistedDataMap data);
 }
