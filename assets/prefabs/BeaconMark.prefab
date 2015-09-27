@@ -1,23 +1,27 @@
 {
     "mesh" : {
-        "mesh" : "ExclamationMark",
-        "material" : "ExclamationMark",
+        "mesh" : "QuestionMark",
+        "material" : "QuestionMark",
         "color" : [255, 255, 20, 255]
     },
     "Location" : {
         "scale" : 0.2
     },
     "AnimateRotation": {
-      "yawSpeed": 0.5,
-      "isSynchronized": false
+        "yawSpeed": 0.5,
+        "isSynchronized": false
+    },
+    "AnimateBounce": {
+        "maxHeight" : 0.5,
+        "period" : 2.0
     },
     "QuestBeacon" : {
-        "beaconName" : "testertron5000"
+        "beaconId" : "homeBeacon"
     },
     "Trigger" : {
         "detectGroups" : ["engine:sensor"]
     },
-    "CylinderShape" : {
+    "CapsuleShape" : {
         "radius" : 2,
         "height" : 5
     }

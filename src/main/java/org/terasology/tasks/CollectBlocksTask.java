@@ -18,7 +18,7 @@ package org.terasology.tasks;
 
 import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
 
-public class CollectBlocksTask implements Task {
+public class CollectBlocksTask extends ModifiableTask {
 
     private final int targetAmount;
     private final String itemId;
@@ -46,7 +46,7 @@ public class CollectBlocksTask implements Task {
 
     @Override
     public String getDescription() {
-        return String.format("Fetch %d blocks of %s - Currently %d", targetAmount, itemId, amount);
+        return String.format("Fetch %d blocks of %s - Now: %d", targetAmount, itemId, amount);
     }
 
     public String getItemId() {
@@ -54,6 +54,7 @@ public class CollectBlocksTask implements Task {
     }
 
     public void setAmount(int amount) {
+        // TODO: consider ignoring changes only if status == ACTIVE
         this.amount = amount;
     }
 
@@ -63,8 +64,12 @@ public class CollectBlocksTask implements Task {
 
     @Override
     public Status getStatus() {
-        // it is not possible to fail this task
-        return (amount >= targetAmount) ? Status.SUCCEEDED : Status.ACTIVE;
+        Status deps = getDependencyStatus();
+        if (deps == Status.SUCCEEDED) {
+            // it is not possible to fail this task
+            return (amount >= targetAmount) ? Status.SUCCEEDED : Status.ACTIVE;
+        }
+        return deps;
     }
 
     @Override

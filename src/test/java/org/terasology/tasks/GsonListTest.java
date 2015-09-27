@@ -1,3 +1,4 @@
+package org.terasology.tasks;
 /*
  * Copyright 2013 MovingBlocks
  *

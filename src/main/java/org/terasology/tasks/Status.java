@@ -19,26 +19,40 @@ package org.terasology.tasks;
 public enum Status {
 
     /**
-     * Not complete, not successful
+     * Pending, not complete, not successful
      */
-    ACTIVE(false, false),
+    PENDING(true, false, false),
 
     /**
-     * Complete and successful
+     * Not queued, not complete, not successful
      */
-    SUCCEEDED(true, true),
+    ACTIVE(false, false, false),
 
     /**
-     * Complete and not successful
+     * Not queued, complete and successful
      */
-    FAILED(true, false);
+    SUCCEEDED(false, true, true),
+
+    /**
+     * Not queued, complete and not successful
+     */
+    FAILED(false, true, false);
 
     private final boolean complete;
     private final boolean success;
+    private final boolean pending;
 
-    Status(boolean complete, boolean success) {
+    Status(boolean pending, boolean complete, boolean success) {
+        this.pending = pending;
         this.complete = complete;
         this.success = success;
+    }
+
+    /**
+     * @return true, if the task is waiting for other tasks to complete
+     */
+    public boolean isPending() {
+        return pending;
     }
 
     /**

@@ -19,11 +19,11 @@
                 ],
                 "layoutInfo" : {
                     "use-content-height" : true,
-                    "use-content-width" : true,
+                    "width" : 280,
                     "position-left" : {
                         "target" : "LEFT"
                     },
-                    "position-top" : {
+                    "position-vertical-center" : {
                         "target" : "MIDDLE"
                     }
                 }

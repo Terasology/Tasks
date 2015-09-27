@@ -23,18 +23,18 @@ import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
 /**
  * This task is successful until the given time runs out.
  */
-public class TimeConstraintTask implements Task {
+public class TimeConstraintTask extends ModifiableTask {
 
-    private final float targetTime;
-    private final Time time;
+    private final float deltaTime;
+    private float startTime;
+    private float currentTime;
 
     /**
      * @param time the time provider
-     * @param targetTime the game time, in seconds.
+     * @param deltaTime the game time, in seconds.
      */
-    public TimeConstraintTask(Time time, float targetTime) {
-        this.time = time;
-        this.targetTime = time.getGameTime() + targetTime;
+    public TimeConstraintTask(float deltaTime) {
+        this.deltaTime = deltaTime;
     }
 
     @Override
@@ -47,21 +47,40 @@ public class TimeConstraintTask implements Task {
         return null;
     }
 
+    public void setTime(float time) {
+        if (getStatus() == Status.SUCCEEDED) {
+            if (startTime == 0) {
+                startTime = time;
+            }
+            currentTime = time;
+        }
+    }
+
     @Override
     public String getDescription() {
-        int timeLeft = TeraMath.floorToInt(targetTime - time.getGameTime());
-        String timeText = DurationFormat.SHORT.format(timeLeft);
-        return String.format("Complete all tasks within %s", timeText);
+        float timeLeft = startTime + deltaTime - currentTime;
+        String totalTimeText = DurationFormat.SHORT.format(TeraMath.floorToInt(deltaTime));
+
+        if (timeLeft <= 0) {
+            return String.format("Complete within %s", totalTimeText);
+        } else {
+            String timeText = DurationFormat.SHORT.format(TeraMath.floorToInt(timeLeft));
+            return String.format("Complete within %s (%s)", timeText, totalTimeText);
+        }
     }
 
     @Override
     public Status getStatus() {
-        return time.getGameTime() < targetTime ? Status.SUCCEEDED : Status.FAILED;
+        Status deps = getDependencyStatus();
+        if (deps == Status.SUCCEEDED) {
+            return currentTime < startTime + deltaTime ? Status.SUCCEEDED : Status.FAILED;
+        }
+        return deps;
     }
 
     @Override
     public String toString() {
-        return String.format("TimeConstraintTask [%.2f]", targetTime);
+        return String.format("TimeConstraintTask [%.2f]", deltaTime);
     }
 }
 

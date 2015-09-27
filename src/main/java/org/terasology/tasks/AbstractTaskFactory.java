@@ -19,7 +19,7 @@ package org.terasology.tasks;
 /**
  *
  */
-public abstract class AbstractTaskFactory<T extends Task> implements TaskFactory<T> {
+public abstract class AbstractTaskFactory<T extends ModifiableTask> implements TaskFactory<T> {
 
     private final String id;
 
@@ -27,7 +27,8 @@ public abstract class AbstractTaskFactory<T extends Task> implements TaskFactory
         this.id = id;
     }
 
-    public boolean matches(String id) {
-        return this.id.equals(id);
+    @Override
+    public boolean matches(String taskId) {
+        return id.equals(taskId);
     }
 }

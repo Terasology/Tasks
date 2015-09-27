@@ -1,7 +1,3 @@
-import org.junit.Assert;
-import org.junit.Test;
-import org.terasology.tasks.DurationFormat;
-
 /*
  * Copyright 2015 MovingBlocks
  *
@@ -18,17 +14,29 @@ import org.terasology.tasks.DurationFormat;
  * limitations under the License.
  */
 
+package org.terasology.tasks.events;
+
+import org.terasology.entitySystem.event.Event;
+import org.terasology.tasks.Quest;
+
 /**
  *
  */
-public class DurationFormatTest {
+public class QuestStartedEvent implements Event {
 
-    @Test
-    public void testSimple() {
-        Assert.assertEquals("2h 3m 4s", DurationFormat.SHORT.format(2 * 3600 + 3 * 60 + 4));
-        Assert.assertEquals("3m 4s", DurationFormat.SHORT.format(3 * 60 + 4));
-        Assert.assertEquals("2h 0m 0s", DurationFormat.SHORT.format(2 * 3600 + 0 * 60 + 0));
-        Assert.assertEquals("5h 0m 7s", DurationFormat.SHORT.format(5 * 3600 + 0 * 60 + 7));
-        Assert.assertEquals("0s", DurationFormat.SHORT.format(0));
+    private final Quest quest;
+
+    /**
+     * @param quest the quest the task is part of
+     */
+    public QuestStartedEvent(Quest quest) {
+        this.quest = quest;
+    }
+
+    /**
+     * @return the quest the completed quest
+     */
+    public Quest getQuest() {
+        return quest;
     }
 }

@@ -48,7 +48,7 @@ public class QuestBeaconSystem extends BaseComponentSystem {
 
         for (Quest quest : questSystem.getActiveQuests()) {
             for (GoToBeaconTask task : quest.getTasks(GoToBeaconTask.class)) {
-                if (task.getTargetBeaconName().equals(component.beaconName)) {
+                if (task.getTargetBeaconName().equals(component.beaconId)) {
                     task.targetReached();
                     logger.info("Target reached!");
 

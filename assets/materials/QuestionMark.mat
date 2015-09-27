@@ -1,7 +1,6 @@
 {
     "shader" : "engine:genericMeshMaterial",
     "params" : {
-        "diffuse" : "questionmark",
-        "textured" : true
+        "textured" : false
     }
 }

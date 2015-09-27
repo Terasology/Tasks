@@ -19,7 +19,9 @@ package org.terasology.tasks.systems;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -38,6 +40,7 @@ import org.terasology.tasks.AbstractTaskFactory;
 import org.terasology.tasks.CollectBlocksTask;
 import org.terasology.tasks.DefaultQuest;
 import org.terasology.tasks.GoToBeaconTask;
+import org.terasology.tasks.ModifiableTask;
 import org.terasology.tasks.Quest;
 import org.terasology.tasks.Status;
 import org.terasology.tasks.Task;
@@ -46,9 +49,12 @@ import org.terasology.tasks.TimeConstraintTask;
 import org.terasology.tasks.components.QuestComponent;
 import org.terasology.tasks.components.TaskElement;
 import org.terasology.tasks.events.QuestCompleteEvent;
+import org.terasology.tasks.events.QuestStartedEvent;
 import org.terasology.tasks.events.TaskCompleteEvent;
 
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Collections2;
+import com.google.common.collect.ListMultimap;
 import com.google.gson.JsonObject;
 
 /**
@@ -64,9 +70,6 @@ public class QuestSystem extends BaseComponentSystem {
     private final Collection<Quest> activeQuestView = Collections2.filter(quests,
             quest -> quest.getStatus() == Status.ACTIVE);
 
-    @In
-    private Time time;         // TODO: move to some place that is related to TimeConstraintTask
-
     /**
      * This updates the quest card variables for tasks calls.
      */
@@ -74,18 +77,30 @@ public class QuestSystem extends BaseComponentSystem {
     public void onActivate(ActivateEvent event, EntityRef entity) {
         QuestComponent questComp = entity.getComponent(QuestComponent.class);
         List<TaskFactory<?>> factories = createTaskFactories();
-        List<Task> tasks = new ArrayList<>();
+        Map<String, ModifiableTask> taskMap = new LinkedHashMap<>();
         for (TaskElement ele : questComp.tasks) {
             for (TaskFactory<?> factory : factories) {
                 if (factory.matches(ele.type)) {
-                    tasks.add(factory.newInstance(ele.data.getData().getAsValueMap()));
+                    ModifiableTask task = factory.newInstance(ele.data.getData().getAsValueMap());
+                    taskMap.put(ele.id, task);
                 }
             }
         }
 
-        quests.add(new DefaultQuest(questComp.shortName, questComp.description, tasks));
+        for (TaskElement ele : questComp.tasks) {
+            if (ele.dependsOn != null) {
+                ModifiableTask task = taskMap.get(ele.id);
+                for (String depId : ele.dependsOn) {
+                    task.addDependency(taskMap.get(depId));
+                }
+            }
+        }
 
-        logger.info("Quest is now active! The quest is {}", new DefaultQuest(questComp.shortName, questComp.description, tasks).getShortName());
+        ArrayList<Task> taskList = new ArrayList<>(taskMap.values());
+        DefaultQuest quest = new DefaultQuest(questComp.shortName, questComp.description, taskList);
+        quests.add(quest);
+
+        entity.send(new QuestStartedEvent(quest));
     }
 
     @ReceiveEvent
@@ -137,7 +152,7 @@ public class QuestSystem extends BaseComponentSystem {
      * @param quest the quest to complete
      * @param success if the quest was successful
      */
-    void finishQuest(Quest quest, boolean success) {
+    void removeQuest(Quest quest, boolean success) {
         quests.remove(quest);
     }
 
@@ -158,7 +173,7 @@ public class QuestSystem extends BaseComponentSystem {
 
             @Override
             public TimeConstraintTask newInstance(PersistedDataMap data) {
-                return new TimeConstraintTask(time,
+                return new TimeConstraintTask(
                         data.get("targetTime").getAsFloat());
             }
         });
@@ -168,7 +183,7 @@ public class QuestSystem extends BaseComponentSystem {
             @Override
             public GoToBeaconTask newInstance(PersistedDataMap data) {
                 return new GoToBeaconTask(
-                        data.get("targetBeacon").getAsString());
+                        data.get("beaconId").getAsString());
             }
         });
 

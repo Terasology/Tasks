@@ -21,17 +21,26 @@
                 }
             },
             {
+                "id" : "collectDirtInTime",
+                "type" : "TimeConstraintTask",
+                "data" : {
+                    "targetTime" : 60
+                }
+            },
+            {
                 "id" : "returnHome",
                 "type" : "GoToBeaconTask",
                 "dependsOn" : ["collectDirt"],
                 "data" : {
-                    "targetBeacon" : "testertron5000"
+                    "beaconId" : "homeBeacon"
                 }
             },
             {
+                "id" : "returnHomeInTime",
+                "dependsOn" : ["collectDirt"],
                 "type" : "TimeConstraintTask",
                 "data" : {
-                    "targetTime" : 300
+                    "targetTime" : 30
                 }
             }
         ]

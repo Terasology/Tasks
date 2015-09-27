@@ -16,14 +16,21 @@
 
 package org.terasology.tasks;
 
-import org.terasology.persistence.typeHandling.PersistedDataMap;
+import org.junit.Assert;
+import org.junit.Test;
+import org.terasology.tasks.DurationFormat;
 
 /**
  *
  */
-public interface TaskFactory<T extends ModifiableTask> {
+public class DurationFormatTest {
 
-    boolean matches(String id);
-
-    T newInstance(PersistedDataMap data);
+    @Test
+    public void testSimple() {
+        Assert.assertEquals("2h 3m 4s", DurationFormat.SHORT.format(2 * 3600 + 3 * 60 + 4));
+        Assert.assertEquals("3m 4s", DurationFormat.SHORT.format(3 * 60 + 4));
+        Assert.assertEquals("2h 0m 0s", DurationFormat.SHORT.format(2 * 3600 + 0 * 60 + 0));
+        Assert.assertEquals("5h 0m 7s", DurationFormat.SHORT.format(5 * 3600 + 0 * 60 + 7));
+        Assert.assertEquals("0s", DurationFormat.SHORT.format(0));
+    }
 }

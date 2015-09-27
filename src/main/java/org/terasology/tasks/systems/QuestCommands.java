@@ -66,7 +66,7 @@ public class QuestCommands extends BaseComponentSystem {
     private boolean finishQuest(String shortName, boolean success) {
         Optional<Quest> opt = questSystem.findQuest(shortName);
         if (opt.isPresent()) {
-            questSystem.finishQuest(opt.get(), success);
+            questSystem.removeQuest(opt.get(), success);
             return true;
         }
         return false;

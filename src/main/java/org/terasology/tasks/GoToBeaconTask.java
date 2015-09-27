@@ -18,7 +18,7 @@ package org.terasology.tasks;
 
 import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
 
-public class GoToBeaconTask implements Task {
+public class GoToBeaconTask extends ModifiableTask {
 
     private final String targetBeaconName;
 
@@ -51,13 +51,19 @@ public class GoToBeaconTask implements Task {
     }
 
     public void targetReached() {
-        targetReached = true;
+        if (getStatus() == Status.ACTIVE) {
+            targetReached = true;
+        }
     }
 
     @Override
     public Status getStatus() {
-        // it is not possible to fail this task
-        return targetReached ? Status.SUCCEEDED : Status.ACTIVE;
+        Status deps = getDependencyStatus();
+        if (deps == Status.SUCCEEDED) {
+            // it is not possible to fail this task
+            return targetReached ? Status.SUCCEEDED : Status.ACTIVE;
+        }
+        return deps;
     }
 
     @Override
