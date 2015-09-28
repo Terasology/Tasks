@@ -35,7 +35,8 @@ import org.terasology.tasks.Task;
  */
 public class QuestRenderer extends AbstractItemRenderer<Quest> {
 
-    private TextureRegion questActive = Assets.getTextureRegion("Tasks:icons#QuestionMark").get();
+    private TextureRegion questPending = Assets.getTextureRegion("Tasks:icons#QuestionMark").get();
+    private TextureRegion questActive = Assets.getTextureRegion("Tasks:icons#ExclamationMark").get();
     private TextureRegion questSuccess = Assets.getTextureRegion("Tasks:icons#CheckMark").get();
     private TextureRegion questFailed = Assets.getTextureRegion("Tasks:icons#CrossMark").get();
 
@@ -90,6 +91,8 @@ public class QuestRenderer extends AbstractItemRenderer<Quest> {
 
     private TextureRegion getIcon(Status status) {
         switch (status) {
+        case PENDING:
+            return questPending;
         case ACTIVE:
             return questActive;
         case FAILED:

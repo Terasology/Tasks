@@ -19,10 +19,18 @@ package org.terasology.tasks;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.terasology.entitySystem.entity.EntityRef;
+
 public interface Quest {
 
+    /**
+     * @return the id/name of the quest, not the one that people see though.
+     */
     String getShortName();
 
+    /**
+     * @return human-readable description and explanation of the quest
+     */
     String getDescription();
 
     List<Task> getAllTasks();
@@ -36,4 +44,10 @@ public interface Quest {
      * @return the status of the quest as a whole
      */
     Status getStatus();
+
+
+    /**
+     * @return the target entity for this quest
+     */
+    EntityRef getEntity();
 }

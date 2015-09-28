@@ -46,6 +46,9 @@ public class GoToBeaconTask extends ModifiableTask {
         return String.format("Go to %s", targetBeaconName);
     }
 
+    /**
+     * @return the name of beacon entity that the player needs to go to
+     */
     public String getTargetBeaconName() {
         return targetBeaconName;
     }

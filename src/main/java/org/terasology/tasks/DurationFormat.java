@@ -37,7 +37,7 @@ public enum DurationFormat {
      * @param seconds the number of seconds
      * @return the text representation in the format HH MM SS
      */
-    public String format(int seconds) {
+    public String formatFull(int seconds) {
         StringBuilder sb = new StringBuilder();
         int rest = seconds;
         int hours = rest / 3600;
@@ -57,6 +57,40 @@ public enum DurationFormat {
 
         sb.append(rest);
         sb.append(ss);
+
+        return sb.toString();
+    }
+
+    /**
+     * @param seconds the number of seconds
+     * @return the text representation in the shortest format
+     */
+    public String formatCompact(int seconds) {
+        StringBuilder sb = new StringBuilder();
+        int rest = seconds;
+        int hours = rest / 3600;
+        rest = rest % 3600;
+        if (hours > 0) {
+            sb.append(hours);
+            sb.append(hs);
+        }
+        int mins = rest / 60;
+        rest = rest % 60;
+        if (mins > 0) {
+            if (sb.length() > 0) {
+                sb.append(' ');
+            }
+            sb.append(mins);
+            sb.append(ms);
+        }
+
+        if (rest > 0 || sb.length() == 0) {
+            if (sb.length() > 0) {
+                sb.append(' ');
+            }
+            sb.append(rest);
+            sb.append(ss);
+        }
 
         return sb.toString();
     }

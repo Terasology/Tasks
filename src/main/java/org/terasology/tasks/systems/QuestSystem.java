@@ -24,17 +24,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.terasology.engine.Time;
+import org.terasology.entitySystem.Component;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.logic.common.ActivateEvent;
+import org.terasology.network.ClientComponent;
+import org.terasology.network.ClientInfoComponent;
 import org.terasology.persistence.typeHandling.PersistedDataMap;
-import org.terasology.registry.In;
 import org.terasology.registry.Share;
 import org.terasology.tasks.AbstractTaskFactory;
 import org.terasology.tasks.CollectBlocksTask;
@@ -50,12 +49,12 @@ import org.terasology.tasks.components.QuestComponent;
 import org.terasology.tasks.components.TaskElement;
 import org.terasology.tasks.events.QuestCompleteEvent;
 import org.terasology.tasks.events.QuestStartedEvent;
-import org.terasology.tasks.events.TaskCompleteEvent;
+import org.terasology.tasks.events.TaskCompletedEvent;
+import org.terasology.tasks.events.StartTaskEvent;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ListMultimap;
-import com.google.gson.JsonObject;
 
 /**
  * This controls the main logic of the quest, and defines what to do with a "quest card"
@@ -64,18 +63,17 @@ import com.google.gson.JsonObject;
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class QuestSystem extends BaseComponentSystem {
 
-    private static final Logger logger = LoggerFactory.getLogger(QuestSystem.class);
-
-    private final List<Quest> quests = new ArrayList<>();
-    private final Collection<Quest> activeQuestView = Collections2.filter(quests,
+    private final ListMultimap<EntityRef, Quest> quests = ArrayListMultimap.create();
+    private final Collection<Quest> activeQuestView = Collections2.filter(quests.values(),
             quest -> quest.getStatus() == Status.ACTIVE);
 
     /**
      * This updates the quest card variables for tasks calls.
      */
     @ReceiveEvent(components = {QuestComponent.class})
-    public void onActivate(ActivateEvent event, EntityRef entity) {
-        QuestComponent questComp = entity.getComponent(QuestComponent.class);
+    public void onActivate(ActivateEvent event, EntityRef questItem) {
+        QuestComponent questComp = questItem.getComponent(QuestComponent.class);
+        EntityRef entity = event.getInstigator().getOwner();
         List<TaskFactory<?>> factories = createTaskFactories();
         Map<String, ModifiableTask> taskMap = new LinkedHashMap<>();
         for (TaskElement ele : questComp.tasks) {
@@ -97,35 +95,47 @@ public class QuestSystem extends BaseComponentSystem {
         }
 
         ArrayList<Task> taskList = new ArrayList<>(taskMap.values());
-        DefaultQuest quest = new DefaultQuest(questComp.shortName, questComp.description, taskList);
-        quests.add(quest);
+
+        DefaultQuest quest = new DefaultQuest(entity, questComp.shortName, questComp.description, taskList);
+        quests.put(entity, quest);
 
         entity.send(new QuestStartedEvent(quest));
+
+        for (Task task : taskList) {
+            if (!task.getStatus().isPending()) {
+                entity.send(new StartTaskEvent(quest, task));
+            }
+        }
     }
 
     @ReceiveEvent
-    public void onTaskComplete(TaskCompleteEvent event, EntityRef entity) {
-        Quest q = event.getQuest();
-        if (q.getStatus().isComplete()) {
-            quests.remove(q);
-            entity.send(new QuestCompleteEvent(q, q.getStatus().isSuccess()));
+    public void onTaskComplete(TaskCompletedEvent event, EntityRef entity) {
+        Quest quest = event.getQuest();
+        for (Task task : quest.getAllTasks()) {
+            if (task.getDependencies().contains(event.getTask())) {
+                if (!task.getStatus().isPending()) {
+                    entity.send(new StartTaskEvent(quest, task));
+                }
+            }
+        }
+        if (quest.getStatus().isComplete()) {
+            entity.send(new QuestCompleteEvent(quest, quest.getStatus().isSuccess()));
         }
     }
 
     /**
-     * Create a quest
-     * @param name is the name of the quest, not the one that people see though.
-     * @param questGoal is the item that you need to get in the quest.
-     * @param friendlyQuestGoal is the goal that people see.
-     * @param amountToGet is how much to get.
-     * @param playerReturnTo is the entity that the player needs to return to for the quest to end.
-     */
-
-    /**
      * @return an unmodifiable map of all known quests.
      */
-    public List<Quest> getQuests() {
-        return Collections.unmodifiableList(quests);
+    public Collection<Quest> getQuests() {
+        return Collections.unmodifiableCollection(quests.values());
+    }
+
+    /**
+     * @param entity the entity of interest
+     * @return an unmodifiable map of all known quests for a given entity.
+     */
+    public List<Quest> getQuestsFor(EntityRef entity) {
+        return Collections.unmodifiableList(quests.get(entity));
     }
 
     /**
@@ -140,7 +150,7 @@ public class QuestSystem extends BaseComponentSystem {
      * @return the first matching quest if it exists
      */
     public Optional<Quest> findQuest(String shortName) {
-        for (Quest q : quests) {
+        for (Quest q : quests.values()) {
             if (q.getShortName().equals(shortName)) {
                 return Optional.of(q);
             }
@@ -153,7 +163,9 @@ public class QuestSystem extends BaseComponentSystem {
      * @param success if the quest was successful
      */
     void removeQuest(Quest quest, boolean success) {
-        quests.remove(quest);
+        for (EntityRef ref : quests.keys()) {
+            quests.remove(ref, quest);
+        }
     }
 
     private List<TaskFactory<?>> createTaskFactories() {

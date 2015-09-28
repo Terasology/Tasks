@@ -46,7 +46,7 @@ public class CollectBlocksTask extends ModifiableTask {
 
     @Override
     public String getDescription() {
-        return String.format("Fetch %d blocks of %s - Now: %d", targetAmount, itemId, amount);
+        return String.format("Collect %s: %d / %d", itemId, amount, targetAmount);
     }
 
     public String getItemId() {

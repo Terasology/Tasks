@@ -17,20 +17,14 @@ package org.terasology.tasks.gui;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 
-import org.terasology.math.Border;
-import org.terasology.math.geom.Vector2i;
+import org.terasology.logic.players.LocalPlayer;
 import org.terasology.registry.In;
-import org.terasology.rendering.nui.Canvas;
 import org.terasology.rendering.nui.databinding.ReadOnlyBinding;
 import org.terasology.rendering.nui.layers.hud.CoreHudWidget;
-import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
-import org.terasology.rendering.nui.widgets.UIBox;
 import org.terasology.rendering.nui.widgets.UILabel;
 import org.terasology.rendering.nui.widgets.UIList;
 import org.terasology.tasks.Quest;
-import org.terasology.tasks.Status;
 import org.terasology.tasks.systems.QuestSystem;
 
 public class QuestHud extends CoreHudWidget {
@@ -39,8 +33,13 @@ public class QuestHud extends CoreHudWidget {
     @In
     private QuestSystem questSystem;
 
+    @In
+    private LocalPlayer localPlayer;
+
     @Override
     protected void initialise() {
+
+//        UILabel title = find("listTitle", UILabel.class);
 
         questList = find("questList", UIList.class);
         if (questList != null) {
@@ -49,24 +48,10 @@ public class QuestHud extends CoreHudWidget {
                     new ReadOnlyBinding<List<Quest>>() {
                         @Override
                         public List<Quest> get() {
-                            return new ArrayList<>(questSystem.getQuests());
+                            return new ArrayList<>(questSystem.getQuestsFor(localPlayer.getClientEntity()));
                         }
                     });
         }
     }
-
-    @Override
-    public Vector2i getPreferredContentSize(Canvas canvas, Vector2i sizeHint) {
-        Border border = canvas.getCurrentStyle().getBackgroundBorder();
-        Vector2i size = getPreferredContentSize();
-        int width = size.x + border.getTotalWidth();
-        int height = size.y + border.getTotalHeight();
-        return new Vector2i(width, height);
-    }
-
-    public Vector2i getPreferredContentSize() {
-        return new Vector2i(320, 200);
-    }
-
 }
 

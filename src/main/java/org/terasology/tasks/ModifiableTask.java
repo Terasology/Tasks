@@ -17,6 +17,8 @@
 package org.terasology.tasks;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class ModifiableTask implements Task {
@@ -25,6 +27,11 @@ public abstract class ModifiableTask implements Task {
 
     public void addDependency(Task task) {
         this.dependencies.add(task);
+    }
+
+    @Override
+    public Collection<Task> getDependencies() {
+        return Collections.unmodifiableList(dependencies);
     }
 
     protected Status getDependencyStatus() {

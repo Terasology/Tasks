@@ -16,7 +16,6 @@
 
 package org.terasology.tasks;
 
-import org.terasology.engine.Time;
 import org.terasology.math.TeraMath;
 import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
 
@@ -26,15 +25,17 @@ import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
 public class TimeConstraintTask extends ModifiableTask {
 
     private final float deltaTime;
-    private float startTime;
+    private final String deltaTimeText;
+
+    private float startTime = Float.NEGATIVE_INFINITY;
     private float currentTime;
 
     /**
-     * @param time the time provider
      * @param deltaTime the game time, in seconds.
      */
     public TimeConstraintTask(float deltaTime) {
         this.deltaTime = deltaTime;
+        this.deltaTimeText = DurationFormat.SHORT.formatCompact(TeraMath.floorToInt(deltaTime));
     }
 
     @Override
@@ -47,11 +48,18 @@ public class TimeConstraintTask extends ModifiableTask {
         return null;
     }
 
+    /**
+     * @param time the game time in seconds
+     */
+    public void startTimer(float time) {
+        startTime = time;
+    }
+
+    /**
+     * @param time the new game time in seconds
+     */
     public void setTime(float time) {
         if (getStatus() == Status.SUCCEEDED) {
-            if (startTime == 0) {
-                startTime = time;
-            }
             currentTime = time;
         }
     }
@@ -59,13 +67,12 @@ public class TimeConstraintTask extends ModifiableTask {
     @Override
     public String getDescription() {
         float timeLeft = startTime + deltaTime - currentTime;
-        String totalTimeText = DurationFormat.SHORT.format(TeraMath.floorToInt(deltaTime));
 
         if (timeLeft <= 0) {
-            return String.format("Complete within %s", totalTimeText);
+            return String.format("Complete within %s", deltaTimeText);
         } else {
-            String timeText = DurationFormat.SHORT.format(TeraMath.floorToInt(timeLeft));
-            return String.format("Complete within %s (%s)", timeText, totalTimeText);
+            String timeText = DurationFormat.SHORT.formatFull(TeraMath.floorToInt(timeLeft));
+            return String.format("Complete within %s (%s)", timeText, deltaTimeText);
         }
     }
 
@@ -80,7 +87,7 @@ public class TimeConstraintTask extends ModifiableTask {
 
     @Override
     public String toString() {
-        return String.format("TimeConstraintTask [%.2f]", deltaTime);
+        return String.format("TimeConstraintTask [%s]", deltaTimeText);
     }
 }
 

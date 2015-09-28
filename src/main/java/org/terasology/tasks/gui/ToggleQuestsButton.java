@@ -22,9 +22,10 @@ import org.terasology.input.Keyboard;
 import org.terasology.input.RegisterBindButton;
 
 /**
- * @author mkienenb
+ * Open/Close Quest HUD using this key
  */
 @RegisterBindButton(id = "toggleQuests", description = "Open/Close Quest HUD")
 @DefaultBinding(type = InputType.KEY, id = Keyboard.KeyId.K)
 public class ToggleQuestsButton extends BindButtonEvent {
+    // annotations suffice
 }

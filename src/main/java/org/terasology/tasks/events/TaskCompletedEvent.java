@@ -23,7 +23,7 @@ import org.terasology.tasks.Task;
 /**
  *
  */
-public class TaskCompleteEvent implements Event {
+public class TaskCompletedEvent implements Event {
 
     private final Task task;
     private final boolean success;
@@ -34,7 +34,7 @@ public class TaskCompleteEvent implements Event {
      * @param task the completed task
      * @param success true if successfully completed, false otherwise
      */
-    public TaskCompleteEvent(Quest quest, Task task, boolean success) {
+    public TaskCompletedEvent(Quest quest, Task task, boolean success) {
         this.task = task;
         this.quest = quest;
         this.success = success;

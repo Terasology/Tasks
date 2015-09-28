@@ -16,8 +16,10 @@
 
 package org.terasology.tasks.systems;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.terasology.engine.Time;
 import org.terasology.entitySystem.entity.EntityRef;
@@ -27,10 +29,11 @@ import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
 import org.terasology.registry.In;
-import org.terasology.tasks.Task;
+import org.terasology.tasks.Quest;
+import org.terasology.tasks.Status;
 import org.terasology.tasks.TimeConstraintTask;
-import org.terasology.tasks.events.QuestStartedEvent;
-import org.terasology.tasks.events.TaskStartedEvent;
+import org.terasology.tasks.events.StartTaskEvent;
+import org.terasology.tasks.events.TaskCompletedEvent;
 
 /**
  * TODO Type description
@@ -41,20 +44,32 @@ public class TimedTaskSystem extends BaseComponentSystem implements UpdateSubscr
     @In
     private Time time;
 
-    private final Collection<TimeConstraintTask> timeTasks = new ArrayList<>();
+    private final Map<TimeConstraintTask, Quest> questRefs = new LinkedHashMap<>();
 
     @ReceiveEvent
-    public void onQuestStarted(QuestStartedEvent event, EntityRef entity) {
-        for (TimeConstraintTask task : event.getQuest().getTasks(TimeConstraintTask.class)) {
-            timeTasks.add(task);
+    public void onStartTask(StartTaskEvent event, EntityRef entity) {
+        if (event.getTask() instanceof TimeConstraintTask) {
+            TimeConstraintTask task = (TimeConstraintTask) event.getTask();
+            questRefs.put(task, event.getQuest());
+            task.startTimer(time.getGameTime());
         }
     }
 
     @Override
     public void update(float delta) {
-        for (TimeConstraintTask task : timeTasks) {
+        Iterator<Entry<TimeConstraintTask, Quest>> it = questRefs.entrySet().iterator();
+        while (it.hasNext()) {
+            Entry<TimeConstraintTask, Quest> entry = it.next();
+            TimeConstraintTask task = entry.getKey();
+            Status prevStatus = task.getStatus();
             task.setTime(time.getGameTime());
+            Status status = task.getStatus();
+            if (status != prevStatus && status.isComplete()) {
+                Quest quest = entry.getValue();
+                EntityRef entity = quest.getEntity();
+                entity.send(new TaskCompletedEvent(quest, task, status.isSuccess()));
+                it.remove();
+            }
         }
     }
-
 }
