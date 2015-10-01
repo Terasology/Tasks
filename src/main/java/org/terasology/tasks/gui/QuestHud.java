@@ -18,11 +18,11 @@ package org.terasology.tasks.gui;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.databinding.ReadOnlyBinding;
 import org.terasology.rendering.nui.layers.hud.CoreHudWidget;
-import org.terasology.rendering.nui.widgets.UILabel;
 import org.terasology.rendering.nui.widgets.UIList;
 import org.terasology.tasks.Quest;
 import org.terasology.tasks.systems.QuestSystem;
@@ -48,7 +48,9 @@ public class QuestHud extends CoreHudWidget {
                     new ReadOnlyBinding<List<Quest>>() {
                         @Override
                         public List<Quest> get() {
-                            return new ArrayList<>(questSystem.getQuestsFor(localPlayer.getClientEntity()));
+                            EntityRef clientEntity = localPlayer.getClientEntity();
+                            List<Quest> quests = questSystem.getQuestsFor(clientEntity);
+                            return new ArrayList<>(quests);
                         }
                     });
         }

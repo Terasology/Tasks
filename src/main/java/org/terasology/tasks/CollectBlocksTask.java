@@ -27,21 +27,25 @@ public class CollectBlocksTask extends ModifiableTask {
 
     private int amount;
 
-    public CollectBlocksTask(int amount, String itemId) {
+    public CollectBlocksTask(String id, int amount, String itemId) {
+        super(id);
         this.targetAmount = amount;
         this.itemId = itemId;
-        this.icon.setQuantity(targetAmount);
-//        this.icon.setIcon(entity.getComponent(ItemComponent.class).icon);
+
+//        BlockItemComponent blockItemComp = item.getComponent(BlockItemComponent.class);
+//        if (itemComp != null && itemComp.renderWithIcon) {
+//            itemIcon.setIcon(itemComp.icon);
+//        } else if (blockItemComp != null) {
+//            itemIcon.setMesh(blockItemComp.blockFamily.getArchetypeBlock().getMesh());
+//            itemIcon.setMeshTexture(Assets.getTexture("engine:terrain").get());
+//        }
+//      this.icon.setQuantity(targetAmount);
+
     }
 
     @Override
     public ItemIcon getIcon() {
-        return null;
-    }
-
-    @Override
-    public String getShortName() {
-        return "Fetch Blocks";
+        return icon;
     }
 
     @Override
@@ -56,6 +60,10 @@ public class CollectBlocksTask extends ModifiableTask {
     public void setAmount(int amount) {
         // TODO: consider ignoring changes only if status == ACTIVE
         this.amount = amount;
+    }
+
+    public int getTargetAmount() {
+        return targetAmount;
     }
 
     public int getAmount() {

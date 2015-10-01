@@ -26,7 +26,8 @@ public class GoToBeaconTask extends ModifiableTask {
 
     private boolean targetReached;
 
-    public GoToBeaconTask(String targetBeaconName) {
+    public GoToBeaconTask(String id, String targetBeaconName) {
+        super(id);
         this.targetBeaconName = targetBeaconName;
 //        this.icon.setIcon(entity.getComponent(ItemComponent.class).icon);
     }
@@ -34,11 +35,6 @@ public class GoToBeaconTask extends ModifiableTask {
     @Override
     public ItemIcon getIcon() {
         return null;
-    }
-
-    @Override
-    public String getShortName() {
-        return "Go to Beacon";
     }
 
     @Override

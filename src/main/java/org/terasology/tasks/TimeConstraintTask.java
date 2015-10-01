@@ -31,16 +31,13 @@ public class TimeConstraintTask extends ModifiableTask {
     private float currentTime;
 
     /**
+     * @param id
      * @param deltaTime the game time, in seconds.
      */
-    public TimeConstraintTask(float deltaTime) {
+    public TimeConstraintTask(String id, float deltaTime) {
+        super(id);
         this.deltaTime = deltaTime;
         this.deltaTimeText = DurationFormat.SHORT.formatCompact(TeraMath.floorToInt(deltaTime));
-    }
-
-    @Override
-    public String getShortName() {
-        return "Time Constraint";
     }
 
     @Override
@@ -88,6 +85,13 @@ public class TimeConstraintTask extends ModifiableTask {
     @Override
     public String toString() {
         return String.format("TimeConstraintTask [%s]", deltaTimeText);
+    }
+
+    /**
+     * @return
+     */
+    public float getTargetTime() {
+        return deltaTime;
     }
 }
 

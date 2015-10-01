@@ -24,14 +24,27 @@ import java.util.List;
 public abstract class ModifiableTask implements Task {
 
     private final List<Task> dependencies = new ArrayList<>();
+    private final String id;
+
+    /**
+     * @param id
+     */
+    public ModifiableTask(String id) {
+        this.id = id;
+    }
 
     public void addDependency(Task task) {
         this.dependencies.add(task);
     }
 
     @Override
-    public Collection<Task> getDependencies() {
+    public List<Task> getDependencies() {
         return Collections.unmodifiableList(dependencies);
+    }
+
+    @Override
+    public String getId() {
+        return id;
     }
 
     protected Status getDependencyStatus() {

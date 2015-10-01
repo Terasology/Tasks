@@ -16,13 +16,11 @@
 
 package org.terasology.tasks;
 
-import java.util.Collection;
+import java.util.List;
 
 import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
 
 public interface Task {
-
-    String getShortName();
 
     String getDescription();
 
@@ -34,5 +32,10 @@ public interface Task {
 
     Status getStatus();
 
-    Collection<Task> getDependencies();
+    List<Task> getDependencies();
+
+    /**
+     * @return
+     */
+    String getId();
 }

@@ -19,9 +19,10 @@ package org.terasology.tasks.components;
 import java.util.List;
 
 import org.terasology.entitySystem.Component;
+import org.terasology.tasks.Task;
 
 public class QuestComponent implements Component {
     public String shortName;
     public String description;
-    public List<TaskElement> tasks;
+    public List<Task> tasks;
 }
