@@ -35,18 +35,19 @@ import org.terasology.persistence.typeHandling.RegisterTypeHandler;
 import org.terasology.persistence.typeHandling.SerializationContext;
 import org.terasology.persistence.typeHandling.SerializationException;
 import org.terasology.persistence.typeHandling.TypeHandler;
-import org.terasology.registry.In;
 import org.terasology.tasks.ModifiableTask;
 import org.terasology.tasks.Task;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 
 @RegisterTypeHandler
 public class TaskTypeHandler implements TypeHandler<Task> {
 
-    @In
-    private ClassMetaLibrary classLibrary;
+    private final ClassMetaLibrary classLibrary;
+
+    public TaskTypeHandler(ClassMetaLibrary classLibrary) {
+        this.classLibrary = classLibrary;
+    }
 
     @Override
     public PersistedData serialize(Task value, SerializationContext context) {
