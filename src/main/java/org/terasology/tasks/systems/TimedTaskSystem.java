@@ -31,6 +31,7 @@ import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
 import org.terasology.registry.In;
 import org.terasology.tasks.Quest;
 import org.terasology.tasks.Status;
+import org.terasology.tasks.Task;
 import org.terasology.tasks.TimeConstraintTask;
 import org.terasology.tasks.events.StartTaskEvent;
 import org.terasology.tasks.events.TaskCompletedEvent;
@@ -52,6 +53,18 @@ public class TimedTaskSystem extends BaseComponentSystem implements UpdateSubscr
             TimeConstraintTask task = (TimeConstraintTask) event.getTask();
             questRefs.put(task, event.getQuest());
             task.startTimer(time.getGameTime());
+        }
+    }
+
+    @ReceiveEvent
+    public void onCompletedTask(TaskCompletedEvent event, EntityRef entity) {
+        Task task = event.getTask();
+        Iterator<Entry<TimeConstraintTask, Quest>> it = questRefs.entrySet().iterator();
+        while (it.hasNext()) {
+            Entry<TimeConstraintTask, Quest> entry = it.next();
+            if (task.getDependencies().contains(entry.getKey())) {
+                it.remove();
+            }
         }
     }
 

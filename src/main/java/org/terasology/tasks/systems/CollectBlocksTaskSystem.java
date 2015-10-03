@@ -64,7 +64,7 @@ public class CollectBlocksTaskSystem extends BaseComponentSystem {
     }
 
     @ReceiveEvent
-    public void onCompletedTask(StartTaskEvent event, EntityRef entity) {
+    public void onCompletedTask(TaskCompletedEvent event, EntityRef entity) {
         tasks.remove(event.getTask());
     }
 

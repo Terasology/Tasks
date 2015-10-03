@@ -21,6 +21,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
@@ -48,6 +50,8 @@ import com.google.common.collect.ListMultimap;
 @RegisterSystem(RegisterMode.CLIENT)
 public class QuestSystem extends BaseComponentSystem {
 
+    private static final Logger logger = LoggerFactory.getLogger(QuestSystem.class);
+
     private final ListMultimap<EntityRef, Quest> quests = ArrayListMultimap.create();
     private final Collection<Quest> activeQuestView = Collections2.filter(quests.values(),
             quest -> quest.getStatus() == Status.ACTIVE);
@@ -64,7 +68,8 @@ public class QuestSystem extends BaseComponentSystem {
         quests.put(entity, quest);
 
         for (Task task : questComp.tasks) {
-            if (!task.getStatus().isPending()) {
+            if (task.getStatus() != Status.PENDING) {
+                logger.info("Starting task {}", task);
                 entity.send(new StartTaskEvent(quest, task));
             }
         }
@@ -73,9 +78,11 @@ public class QuestSystem extends BaseComponentSystem {
     @ReceiveEvent
     public void onTaskComplete(TaskCompletedEvent event, EntityRef entity) {
         Quest quest = event.getQuest();
+        logger.info("Task {} complete", event.getTask());
         for (Task task : quest.getAllTasks()) {
             if (task.getDependencies().contains(event.getTask())) {
-                if (!task.getStatus().isPending()) {
+                if (task.getStatus() != Status.PENDING) {
+                    logger.info("Starting task {}", task);
                     entity.send(new StartTaskEvent(quest, task));
                 }
             }

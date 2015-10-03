@@ -69,7 +69,7 @@ public class QuestRenderer extends AbstractItemRenderer<Quest> {
             String taskText = getTaskText(task);
             List<String> lines = TextLineBuilder.getLines(font, taskText, maxWidth);
             Rect2i taskTextRect = Rect2i.createFromMinAndMax(20, y, maxWidth, maxHeight);
-            if (task.getStatus().isPending()) {
+            if (task.getStatus() == Status.PENDING) {
                 // TODO: add methods Canvas.drawText(String, Color)
                 taskText = FontColor.getColored(taskText, Color.GREY);
             }
