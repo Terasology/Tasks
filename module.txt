@@ -1,9 +1,9 @@
 {
     "id" : "Tasks",
-    "version" : "0.1.0",
-    "author" : "nh_99",
+    "version" : "0.2.0-SNAPSHOT",
+    "author" : "nh_99, msteiger",
     "displayName" : "Tasks",
-    "description" : "A module to add some gameplay features to the game, such as questing, achievements, and missions.",
+    "description" : "A module to add some questing features to the game.",
     "dependencies" : [],
     "isServerSideOnly" : false
 }
