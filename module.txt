@@ -4,6 +4,11 @@
     "author" : "nh_99, msteiger",
     "displayName" : "Tasks",
     "description" : "A module to add some questing features to the game.",
-    "dependencies" : [],
+    "dependencies" : [
+        {
+            "id" : "ItemRendering",
+            "minVersion" : "0.1.1"
+        }
+    ],
     "isServerSideOnly" : false
 }
