@@ -17,7 +17,7 @@ package org.terasology.tasks.gui;
 
 import java.util.List;
 
-import org.terasology.asset.Assets;
+import org.terasology.utilities.Assets;
 import org.terasology.math.geom.Rect2i;
 import org.terasology.math.geom.Vector2i;
 import org.terasology.rendering.FontColor;
