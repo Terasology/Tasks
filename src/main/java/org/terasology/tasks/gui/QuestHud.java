@@ -37,7 +37,7 @@ public class QuestHud extends CoreHudWidget {
     private LocalPlayer localPlayer;
 
     @Override
-    protected void initialise() {
+    public void initialise() {
 
 //        UILabel title = find("listTitle", UILabel.class);
 
