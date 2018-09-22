@@ -16,19 +16,20 @@
 
 package org.terasology.tasks.persistence;
 
-import com.google.common.collect.ImmutableMap;
+import java.util.Map;
+
 import org.terasology.persistence.typeHandling.DeserializationContext;
 import org.terasology.persistence.typeHandling.PersistedData;
 import org.terasology.persistence.typeHandling.PersistedDataMap;
 import org.terasology.persistence.typeHandling.RegisterTypeHandler;
 import org.terasology.persistence.typeHandling.SerializationContext;
-import org.terasology.persistence.typeHandling.TypeHandler;
+import org.terasology.persistence.typeHandling.SimpleTypeHandler;
 import org.terasology.tasks.TimeConstraintTask;
 
-import java.util.Map;
+import com.google.common.collect.ImmutableMap;
 
 @RegisterTypeHandler
-public class TimedTaskTypeHandler implements TypeHandler<TimeConstraintTask> {
+public class TimedTaskTypeHandler extends SimpleTypeHandler<TimeConstraintTask> {
 
     @Override
     public PersistedData serialize(TimeConstraintTask task, SerializationContext context) {

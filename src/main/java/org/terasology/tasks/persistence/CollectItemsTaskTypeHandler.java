@@ -16,19 +16,20 @@
 
 package org.terasology.tasks.persistence;
 
-import com.google.common.collect.ImmutableMap;
+import java.util.Map;
+
 import org.terasology.persistence.typeHandling.DeserializationContext;
 import org.terasology.persistence.typeHandling.PersistedData;
 import org.terasology.persistence.typeHandling.PersistedDataMap;
 import org.terasology.persistence.typeHandling.RegisterTypeHandler;
 import org.terasology.persistence.typeHandling.SerializationContext;
-import org.terasology.persistence.typeHandling.TypeHandler;
+import org.terasology.persistence.typeHandling.SimpleTypeHandler;
 import org.terasology.tasks.CollectBlocksTask;
 
-import java.util.Map;
+import com.google.common.collect.ImmutableMap;
 
 @RegisterTypeHandler
-public class CollectItemsTaskTypeHandler implements TypeHandler<CollectBlocksTask> {
+public class CollectItemsTaskTypeHandler extends SimpleTypeHandler<CollectBlocksTask> {
 
     @Override
     public PersistedData serialize(CollectBlocksTask task, SerializationContext context) {
