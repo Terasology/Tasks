@@ -17,38 +17,38 @@
 package org.terasology.tasks.persistence;
 
 import java.util.Map;
+import java.util.Optional;
 
-import org.terasology.persistence.typeHandling.DeserializationContext;
-import org.terasology.persistence.typeHandling.PersistedData;
-import org.terasology.persistence.typeHandling.PersistedDataMap;
-import org.terasology.persistence.typeHandling.RegisterTypeHandler;
-import org.terasology.persistence.typeHandling.SerializationContext;
-import org.terasology.persistence.typeHandling.SimpleTypeHandler;
+import org.terasology.persistence.typeHandling.*;
 import org.terasology.tasks.CollectBlocksTask;
 
 import com.google.common.collect.ImmutableMap;
 
 @RegisterTypeHandler
-public class CollectItemsTaskTypeHandler extends SimpleTypeHandler<CollectBlocksTask> {
+public class CollectItemsTaskTypeHandler extends TypeHandler<CollectBlocksTask> {
 
     @Override
-    public PersistedData serialize(CollectBlocksTask task, SerializationContext context) {
+    public PersistedData serializeNonNull(CollectBlocksTask task, PersistedDataSerializer context) {
         Map<String, PersistedData> data = ImmutableMap.of(
-                "amount", context.create(task.getTargetAmount()),
-                "itemId", context.create(task.getItemId()));
+                "amount", context.serialize(task.getTargetAmount()),
+                "itemId", context.serialize(task.getItemId()));
 
-        return context.create(ImmutableMap.of(
-                "data", context.create(data)));
+        return context.serialize(ImmutableMap.of(
+                "data", context.serialize(data),
+                "id", context.serialize(task.getId())));
     }
 
     @Override
-    public CollectBlocksTask deserialize(PersistedData data, DeserializationContext context) {
+    public Optional<CollectBlocksTask> deserialize(PersistedData data) {
+        if (!data.isString()) {
+            return Optional.empty();
+        }
         PersistedDataMap root = data.getAsValueMap();
         String id = root.get("id").getAsString();
         PersistedDataMap taskData = root.get("data").getAsValueMap();
-        return new CollectBlocksTask(id,
+        return Optional.of(new CollectBlocksTask(id,
                 taskData.get("amount").getAsInteger(),
-                taskData.get("itemId").getAsString());
+                taskData.get("itemId").getAsString()));
     }
 
 }

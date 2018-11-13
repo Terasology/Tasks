@@ -17,36 +17,32 @@
 package org.terasology.tasks.persistence;
 
 import java.util.Map;
-
-import org.terasology.persistence.typeHandling.DeserializationContext;
-import org.terasology.persistence.typeHandling.PersistedData;
-import org.terasology.persistence.typeHandling.PersistedDataMap;
-import org.terasology.persistence.typeHandling.RegisterTypeHandler;
-import org.terasology.persistence.typeHandling.SerializationContext;
-import org.terasology.persistence.typeHandling.SimpleTypeHandler;
-import org.terasology.tasks.TimeConstraintTask;
+import java.util.Optional;
 
 import com.google.common.collect.ImmutableMap;
+import org.terasology.persistence.typeHandling.*;
+import org.terasology.tasks.TimeConstraintTask;
 
 @RegisterTypeHandler
-public class TimedTaskTypeHandler extends SimpleTypeHandler<TimeConstraintTask> {
+public class TimedTaskTypeHandler extends TypeHandler<TimeConstraintTask> {
 
     @Override
-    public PersistedData serialize(TimeConstraintTask task, SerializationContext context) {
+    public PersistedData serializeNonNull(TimeConstraintTask task, PersistedDataSerializer context) {
         Map<String, PersistedData> data = ImmutableMap.of(
-                "targetTime", context.create(task.getTargetTime()));
+                "targetTime", context.serialize(task.getTargetTime()));
 
-        return context.create(ImmutableMap.of(
-                "data", context.create(data)));
+        return context.serialize(ImmutableMap.of(
+                "data", context.serialize(data),
+                "id", context.serialize(task.getId())));
     }
 
     @Override
-    public TimeConstraintTask deserialize(PersistedData data, DeserializationContext context) {
+    public Optional<TimeConstraintTask> deserialize(PersistedData data) {
         PersistedDataMap root = data.getAsValueMap();
         String id = root.get("id").getAsString();
         PersistedDataMap taskData = root.get("data").getAsValueMap();
-        return new TimeConstraintTask(id,
-                taskData.get("targetTime").getAsFloat());
+        return Optional.of(new TimeConstraintTask(id,
+                taskData.get("targetTime").getAsFloat()));
     }
 
 }
