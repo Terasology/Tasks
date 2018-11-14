@@ -18,7 +18,9 @@ import java.util.*;
 import java.util.Map.Entry;
 import org.terasology.engine.bootstrap.ClassMetaLibrary;
 import org.terasology.persistence.typeHandling.*;
+import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
 import org.terasology.tasks.ModifiableTask;
+import org.terasology.tasks.Status;
 import org.terasology.tasks.Task;
 import com.google.common.collect.Lists;
 @RegisterTypeHandler
@@ -32,7 +34,7 @@ public class TaskTypeHandler extends TypeHandler<Task> {
         throw new SerializationException("No type handler found for " + value);
     }
     @Override
-    public Optional<ModifiableTask> deserializeOrNull(PersistedData data) {
+    public Optional<ModifiableTask> deserialize(PersistedData data) {
         String typeId = data.getAsValueMap().getAsString("type");
         Iterable<Class<? extends ModifiableTask>> types = classLibrary.getSubtypesOf(ModifiableTask.class, typeId);
         Iterator<Class<? extends ModifiableTask>> it = types.iterator();
@@ -43,7 +45,7 @@ public class TaskTypeHandler extends TypeHandler<Task> {
         if (it.hasNext()) {
             throw new DeserializationException("Ambiguous type: '" + typeId + "' - found " + types);
         }
-        return Optional.of(deserialize(data)).orElse(type);
+        return Optional.of(type);
     }
     @Override
     public PersistedData serializeCollection(Collection<Task> collection, PersistedDataSerializer context) {
