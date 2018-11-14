@@ -34,7 +34,7 @@ public class TaskTypeHandler extends TypeHandler<Task> {
         throw new SerializationException("No type handler found for " + value);
     }
     @Override
-    public Optional<ModifiableTask> deserialize(PersistedData data) {
+    public ModifiableTask deserialize(PersistedData data) {
         String typeId = data.getAsValueMap().getAsString("type");
         Iterable<Class<? extends ModifiableTask>> types = classLibrary.getSubtypesOf(ModifiableTask.class, typeId);
         Iterator<Class<? extends ModifiableTask>> it = types.iterator();
@@ -45,7 +45,7 @@ public class TaskTypeHandler extends TypeHandler<Task> {
         if (it.hasNext()) {
             throw new DeserializationException("Ambiguous type: '" + typeId + "' - found " + types);
         }
-        return Optional.of(type);
+        return type;
     }
     @Override
     public PersistedData serializeCollection(Collection<Task> collection, PersistedDataSerializer context) {
