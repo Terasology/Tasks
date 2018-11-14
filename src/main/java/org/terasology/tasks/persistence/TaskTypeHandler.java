@@ -79,7 +79,7 @@ public class TaskTypeHandler extends TypeHandler<Task> {
             // first deserialize the actual tasks based on their type
             for (PersistedData value : array) {
                 String id = value.getAsValueMap().getAsString("id");
-                result.put(id, new ModifiableTask(id));
+                result.put(id, deserialize(value));
             }
             // then deserialize the task dependencies and map the ids to instances
             for (PersistedData value : array) {
