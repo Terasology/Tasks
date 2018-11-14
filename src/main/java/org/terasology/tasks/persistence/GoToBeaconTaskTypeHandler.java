@@ -19,7 +19,11 @@ package org.terasology.tasks.persistence;
 import java.util.Map;
 import java.util.Optional;
 
-import org.terasology.persistence.typeHandling.*;
+import org.terasology.persistence.typeHandling.PersistedData;
+import org.terasology.persistence.typeHandling.PersistedDataMap;
+import org.terasology.persistence.typeHandling.PersistedDataSerializer;
+import org.terasology.persistence.typeHandling.RegisterTypeHandler;
+import org.terasology.persistence.typeHandling.TypeHandler;
 import org.terasology.tasks.GoToBeaconTask;
 
 import com.google.common.collect.ImmutableMap;
