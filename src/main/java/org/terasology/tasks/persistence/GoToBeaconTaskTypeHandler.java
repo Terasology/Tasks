@@ -22,17 +22,17 @@ import org.terasology.persistence.typeHandling.DeserializationContext;
 import org.terasology.persistence.typeHandling.PersistedData;
 import org.terasology.persistence.typeHandling.PersistedDataMap;
 import org.terasology.persistence.typeHandling.RegisterTypeHandler;
-import org.terasology.persistence.typeHandling.SerializationContext;
-import org.terasology.persistence.typeHandling.SimpleTypeHandler;
+import org.terasology.persistence.typeHandling.*;
+import java.util.Optional;
 import org.terasology.tasks.GoToBeaconTask;
 
 import com.google.common.collect.ImmutableMap;
 
 @RegisterTypeHandler
-public class GoToBeaconTaskTypeHandler extends SimpleTypeHandler<GoToBeaconTask> {
+public class GoToBeaconTaskTypeHandler extends TypeHandler<GoToBeaconTask> {
 
     @Override
-    public PersistedData serialize(GoToBeaconTask task, SerializationContext context) {
+    public PersistedData serialize(GoToBeaconTask task, PersistenceDataSerializer context) {
         Map<String, PersistedData> data = ImmutableMap.of(
                 "beaconId", context.create(task.getTargetBeaconName()));
 
@@ -41,12 +41,16 @@ public class GoToBeaconTaskTypeHandler extends SimpleTypeHandler<GoToBeaconTask>
     }
 
     @Override
-    public GoToBeaconTask deserialize(PersistedData data, DeserializationContext context) {
+    public Optional<GoToBeaconTask> deserialize(PersistedData data) {
+    	if (!data.isValueMap())
+    	{
+    		return Optional.empty();
+    	}
         PersistedDataMap root = data.getAsValueMap();
         String id = root.get("id").getAsString();
         PersistedDataMap taskData = root.get("data").getAsValueMap();
-        return new GoToBeaconTask(id,
-                taskData.get("beaconId").getAsString());
+        return Optional.ofNullable(new GoToBeaconTask(id,
+                taskData.get("beaconId").getAsString()));
     }
 
 }
