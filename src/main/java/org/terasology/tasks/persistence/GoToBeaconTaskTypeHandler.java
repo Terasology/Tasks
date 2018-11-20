@@ -17,13 +17,11 @@
 package org.terasology.tasks.persistence;
 
 import java.util.Map;
+import java.util.Optional;
 
-import org.terasology.persistence.typeHandling.DeserializationContext;
 import org.terasology.persistence.typeHandling.PersistedData;
 import org.terasology.persistence.typeHandling.PersistedDataMap;
 import org.terasology.persistence.typeHandling.RegisterTypeHandler;
-import org.terasology.persistence.typeHandling.*;
-import java.util.Optional;
 import org.terasology.tasks.GoToBeaconTask;
 
 import com.google.common.collect.ImmutableMap;
@@ -34,10 +32,10 @@ public class GoToBeaconTaskTypeHandler extends TypeHandler<GoToBeaconTask> {
     @Override
     public PersistedData serialize(GoToBeaconTask task, PersistenceDataSerializer context) {
         Map<String, PersistedData> data = ImmutableMap.of(
-                "beaconId", context.create(task.getTargetBeaconName()));
+                "beaconId", context.serialize(task.getTargetBeaconName()));
 
         return context.create(ImmutableMap.of(
-                "data", context.create(data)));
+                "data", context.serialize(data)));
     }
 
     @Override

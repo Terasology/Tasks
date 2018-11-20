@@ -17,16 +17,14 @@
 package org.terasology.tasks.persistence;
 
 import java.util.Map;
+import java.util.Optional;
 
 import org.terasology.persistence.typeHandling.PersistedData;
 import org.terasology.persistence.typeHandling.PersistedDataMap;
 import org.terasology.persistence.typeHandling.RegisterTypeHandler;
 import org.terasology.persistence.typeHandling.TypeHandler;
-import org.terasology.persistence.serializers.*;
 import org.terasology.tasks.CollectBlocksTask;
-import org.terasology.persistence.typeHandling.*;
 
-import java.util.Optional;
 import com.google.common.collect.ImmutableMap;
 
 @RegisterTypeHandler
