@@ -66,7 +66,6 @@ public class QuestSystem extends BaseComponentSystem {
         EntityRef entity = event.getInstigator().getOwner();
 
         BeforeQuestEvent beforeQuestEvent = questItem.send(new BeforeQuestEvent(questComp.shortName));
-        logger.info("Before quest event sent...");
         if (!beforeQuestEvent.isConsumed()) {
             DefaultQuest quest = new DefaultQuest(entity, questComp.shortName, questComp.description, questComp.tasks);
             quests.put(entity, quest);
