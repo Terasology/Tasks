@@ -35,6 +35,7 @@ import org.terasology.tasks.Quest;
 import org.terasology.tasks.Status;
 import org.terasology.tasks.Task;
 import org.terasology.tasks.components.QuestComponent;
+import org.terasology.tasks.events.BeforeQuestEvent;
 import org.terasology.tasks.events.QuestCompleteEvent;
 import org.terasology.tasks.events.StartTaskEvent;
 import org.terasology.tasks.events.TaskCompletedEvent;
@@ -64,13 +65,17 @@ public class QuestSystem extends BaseComponentSystem {
         QuestComponent questComp = questItem.getComponent(QuestComponent.class);
         EntityRef entity = event.getInstigator().getOwner();
 
-        DefaultQuest quest = new DefaultQuest(entity, questComp.shortName, questComp.description, questComp.tasks);
-        quests.put(entity, quest);
+        BeforeQuestEvent beforeQuestEvent = questItem.send(new BeforeQuestEvent(questComp.shortName));
+        logger.info("Before quest event sent...");
+        if (!beforeQuestEvent.isConsumed()) {
+            DefaultQuest quest = new DefaultQuest(entity, questComp.shortName, questComp.description, questComp.tasks);
+            quests.put(entity, quest);
 
-        for (Task task : questComp.tasks) {
-            if (task.getStatus() != Status.PENDING) {
-                logger.info("Starting task {}", task);
-                entity.send(new StartTaskEvent(quest, task));
+            for (Task task : questComp.tasks) {
+                if (task.getStatus() != Status.PENDING) {
+                    logger.info("Starting task {}", task);
+                    entity.send(new StartTaskEvent(quest, task));
+                }
             }
         }
     }
