@@ -19,7 +19,8 @@ package org.terasology.tasks.events;
 import org.terasology.entitySystem.event.AbstractConsumableEvent;
 
 /**
- *
+ * Event triggered before addition of new quest. This event is sent to the quest entity to allow
+ * cancellation of quest if required.
  */
 public class BeforeQuestEvent extends AbstractConsumableEvent {
 
