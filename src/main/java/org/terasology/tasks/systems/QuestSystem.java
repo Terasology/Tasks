@@ -143,7 +143,7 @@ public class QuestSystem extends BaseComponentSystem {
      * @param quest the quest to complete
      * @param success if the quest was successful
      */
-    void removeQuest(Quest quest, boolean success) {
+    public void removeQuest(Quest quest, boolean success) {
         for (EntityRef ref : quests.keys()) {
             quests.remove(ref, quest);
             break;
