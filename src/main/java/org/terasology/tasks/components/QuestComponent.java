@@ -16,13 +16,11 @@
 
 package org.terasology.tasks.components;
 
-import java.util.List;
-
 import org.terasology.entitySystem.Component;
-import org.terasology.tasks.Task;
+import org.terasology.tasks.TaskGraph;
 
 public class QuestComponent implements Component {
     public String shortName;
     public String description;
-    public List<Task> tasks;
+    public TaskGraph taskGraph;
 }

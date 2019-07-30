@@ -16,14 +16,7 @@
 
 package org.terasology.tasks;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
 public abstract class ModifiableTask implements Task {
-
-    private final List<Task> dependencies = new ArrayList<>();
     private final String id;
 
     /**
@@ -33,46 +26,8 @@ public abstract class ModifiableTask implements Task {
         this.id = id;
     }
 
-    public void addDependency(Task task) {
-        this.dependencies.add(task);
-    }
-
-    @Override
-    public List<Task> getDependencies() {
-        return Collections.unmodifiableList(dependencies);
-    }
-
     @Override
     public String getId() {
         return id;
-    }
-
-    protected Status getDependencyStatus() {
-        boolean stillPending = false;
-        for (Task task : dependencies) {
-            switch (task.getStatus()) {
-                case FAILED:
-                    return Status.FAILED;
-                case ACTIVE:
-                case PENDING:
-                    stillPending = true;
-                    break;
-                case SUCCEEDED:
-                    break;
-            }
-        }
-        if (stillPending) {
-            return Status.PENDING;
-        }
-        return Status.SUCCEEDED;
-    }
-
-    protected boolean dependenciesSuccess() {
-        for (Task task : dependencies) {
-            if (task.getStatus() != Status.SUCCEEDED) {
-                return false;
-            }
-        }
-        return true;
     }
 }

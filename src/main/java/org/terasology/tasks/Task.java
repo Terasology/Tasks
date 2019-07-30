@@ -30,9 +30,12 @@ public interface Task {
      */
     ItemIcon getIcon();
 
+    /**
+     * Returns the {@link Status} of this {@link Task}, not including its dependencies.
+     * If you want the {@link Status} of this {@link Task} along with its dependencies,
+     * see {@link TaskGraph#getTaskStatus(Task)}.
+     */
     Status getStatus();
-
-    List<Task> getDependencies();
 
     /**
      * @return

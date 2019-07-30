@@ -34,6 +34,7 @@ import org.terasology.network.ClientComponent;
 import org.terasology.tasks.CollectBlocksTask;
 import org.terasology.tasks.Quest;
 import org.terasology.tasks.Status;
+import org.terasology.tasks.TaskGraph;
 import org.terasology.tasks.events.StartTaskEvent;
 import org.terasology.tasks.events.TaskCompletedEvent;
 
@@ -100,9 +101,13 @@ public class CollectBlocksTaskSystem extends BaseComponentSystem {
 
             // consider using InventoryUtils.isSameItem(EntityRef, EntityRef)
             if (stackId.equalsIgnoreCase(task.getItemId())) {
-                Status prevStatus = task.getStatus();
+                TaskGraph taskGraph = entry.getValue().getTaskGraph();
+
+                Status prevStatus = taskGraph.getTaskStatus(task);
+
                 task.setAmount(task.getAmount() + amountChange);
-                Status status = task.getStatus();
+
+                Status status = taskGraph.getTaskStatus(task);
                 if (prevStatus != status && status.isComplete()) {
                     it.remove();
                     EntityRef client = charEntity.getOwner();

@@ -17,6 +17,7 @@ package org.terasology.tasks.gui;
 
 import java.util.List;
 
+import org.terasology.tasks.TaskGraph;
 import org.terasology.utilities.Assets;
 import org.terasology.math.geom.Rect2i;
 import org.terasology.math.geom.Vector2i;
@@ -64,12 +65,16 @@ public class QuestRenderer extends AbstractItemRenderer<Quest> {
         int maxHeight = canvas.getRegion().height();
 
         int y = lineHeight;
-        for (Task task : quest.getAllTasks()) {
+        TaskGraph taskGraph = quest.getTaskGraph();
+        for (Task task : taskGraph) {
             // draw task text first
             String taskText = getTaskText(task);
             List<String> lines = TextLineBuilder.getLines(font, taskText, maxWidth);
             Rect2i taskTextRect = Rect2i.createFromMinAndMax(20, y, maxWidth, maxHeight);
-            if (task.getStatus() == Status.PENDING) {
+
+            Status taskStatus = taskGraph.getTaskStatus(task);
+
+            if (taskStatus == Status.PENDING) {
                 // TODO: add methods Canvas.drawText(String, Color)
                 taskText = FontColor.getColored(taskText, Color.GREY);
             }
@@ -77,7 +82,7 @@ public class QuestRenderer extends AbstractItemRenderer<Quest> {
 
             // draw status icon
             Rect2i statusIconRect = Rect2i.createFromMinAndSize(0, y, lineHeight, lineHeight).expand(-2, -2);
-            canvas.drawTexture(getIcon(task.getStatus()), statusIconRect);
+            canvas.drawTexture(getIcon(taskStatus), statusIconRect);
 
             // draw task icon, if available
             int lastIdx = lines.size() - 1;
@@ -100,7 +105,7 @@ public class QuestRenderer extends AbstractItemRenderer<Quest> {
 
         // only tasks for active quests are explicitly listed
         if (quest.getStatus() == Status.ACTIVE) {
-            for (Task task : quest.getAllTasks()) {
+            for (Task task : quest.getTaskGraph()) {
                 text += '\n';
                 text += getTaskText(task);
             }

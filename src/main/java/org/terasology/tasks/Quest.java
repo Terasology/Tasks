@@ -16,9 +16,6 @@
 
 package org.terasology.tasks;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.terasology.entitySystem.entity.EntityRef;
 
 public interface Quest {
@@ -33,12 +30,7 @@ public interface Quest {
      */
     String getDescription();
 
-    List<Task> getAllTasks();
-
-    @SuppressWarnings("unchecked")
-    default <T extends Task> List<T> getTasks(Class<T> type) {
-        return (List<T>) getAllTasks().stream().filter(type::isInstance).collect(Collectors.toList());
-    }
+    TaskGraph getTaskGraph();
 
     /**
      * @return the status of the quest as a whole

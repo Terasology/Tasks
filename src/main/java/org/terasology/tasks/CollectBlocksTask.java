@@ -23,9 +23,9 @@ public class CollectBlocksTask extends ModifiableTask {
     private final int targetAmount;
     private final String itemId;
 
-    private final ItemIcon icon = new ItemIcon();
+    private transient final ItemIcon icon = new ItemIcon();
 
-    private int amount;
+    private transient int amount;
 
     public CollectBlocksTask(String id, int amount, String itemId) {
         super(id);
@@ -57,11 +57,6 @@ public class CollectBlocksTask extends ModifiableTask {
         return itemId;
     }
 
-    public void setAmount(int amount) {
-        // TODO: consider ignoring changes only if status == ACTIVE
-        this.amount = amount;
-    }
-
     public int getTargetAmount() {
         return targetAmount;
     }
@@ -70,14 +65,15 @@ public class CollectBlocksTask extends ModifiableTask {
         return amount;
     }
 
+    public void setAmount(int amount) {
+        // TODO: consider ignoring changes only if status == ACTIVE
+        this.amount = amount;
+    }
+
     @Override
     public Status getStatus() {
-        Status deps = getDependencyStatus();
-        if (deps == Status.SUCCEEDED) {
-            // it is not possible to fail this task
-            return (amount >= targetAmount) ? Status.SUCCEEDED : Status.ACTIVE;
-        }
-        return deps;
+        // it is not possible to fail this task
+        return (amount >= targetAmount) ? Status.SUCCEEDED : Status.ACTIVE;
     }
 
     @Override

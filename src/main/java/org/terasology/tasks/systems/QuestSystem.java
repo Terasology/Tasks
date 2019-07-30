@@ -34,6 +34,7 @@ import org.terasology.tasks.DefaultQuest;
 import org.terasology.tasks.Quest;
 import org.terasology.tasks.Status;
 import org.terasology.tasks.Task;
+import org.terasology.tasks.TaskGraph;
 import org.terasology.tasks.components.QuestComponent;
 import org.terasology.tasks.events.BeforeQuestEvent;
 import org.terasology.tasks.events.QuestCompleteEvent;
@@ -67,11 +68,13 @@ public class QuestSystem extends BaseComponentSystem {
 
         BeforeQuestEvent beforeQuestEvent = questItem.send(new BeforeQuestEvent(questComp.shortName));
         if (!beforeQuestEvent.isConsumed()) {
-            DefaultQuest quest = new DefaultQuest(entity, questComp.shortName, questComp.description, questComp.tasks);
+            TaskGraph taskGraph = questComp.taskGraph;
+
+            DefaultQuest quest = new DefaultQuest(entity, questComp.shortName, questComp.description, taskGraph);
             quests.put(entity, quest);
 
-            for (Task task : questComp.tasks) {
-                if (task.getStatus() != Status.PENDING) {
+            for (Task task : taskGraph) {
+                if (taskGraph.getTaskStatus(task) != Status.PENDING) {
                     logger.info("Starting task {}", task);
                     entity.send(new StartTaskEvent(quest, task));
                 }
@@ -83,9 +86,10 @@ public class QuestSystem extends BaseComponentSystem {
     public void onTaskComplete(TaskCompletedEvent event, EntityRef entity) {
         Quest quest = event.getQuest();
         logger.info("Task {} complete", event.getTask());
-        for (Task task : quest.getAllTasks()) {
-            if (task.getDependencies().contains(event.getTask())) {
-                if (task.getStatus() != Status.PENDING) {
+        TaskGraph taskGraph = quest.getTaskGraph();
+        for (Task task : taskGraph) {
+            if (taskGraph.getDependencies(task).contains(event.getTask())) {
+                if (taskGraph.getTaskStatus(task) != Status.PENDING) {
                     logger.info("Starting task {}", task);
                     entity.send(new StartTaskEvent(quest, task));
                 }
