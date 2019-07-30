@@ -22,5 +22,5 @@ import org.terasology.tasks.TaskGraph;
 public class QuestComponent implements Component {
     public String shortName;
     public String description;
-    public TaskGraph taskGraph;
+    public TaskGraph tasks;
 }

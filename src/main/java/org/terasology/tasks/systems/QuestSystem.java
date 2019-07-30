@@ -68,7 +68,7 @@ public class QuestSystem extends BaseComponentSystem {
 
         BeforeQuestEvent beforeQuestEvent = questItem.send(new BeforeQuestEvent(questComp.shortName));
         if (!beforeQuestEvent.isConsumed()) {
-            TaskGraph taskGraph = questComp.taskGraph;
+            TaskGraph taskGraph = questComp.tasks;
 
             DefaultQuest quest = new DefaultQuest(entity, questComp.shortName, questComp.description, taskGraph);
             quests.put(entity, quest);
