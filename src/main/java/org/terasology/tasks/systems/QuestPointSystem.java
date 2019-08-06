@@ -16,6 +16,7 @@
 
 package org.terasology.tasks.systems;
 
+import org.terasology.tasks.components.QuestSourceComponent;
 import org.terasology.utilities.Assets;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
@@ -63,6 +64,7 @@ public class QuestPointSystem extends BaseComponentSystem {
             Prefab prefab = Assets.getPrefab(questItem).get();
             if (prefab.getComponent(ItemComponent.class) != null) {
                 EntityRef item = entityManager.create(prefab);
+                item.addComponent(new QuestSourceComponent(questPoint));
                 inventoryManager.giveItem(charEnt, questPoint, item);
             }
         }
