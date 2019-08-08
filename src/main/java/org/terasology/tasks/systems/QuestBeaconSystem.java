@@ -70,9 +70,10 @@ public class QuestBeaconSystem extends BaseComponentSystem {
 
                 Status status = task.getStatus();
                 if (prevStatus != status && status.isComplete()) {
+                    TaskCompletedEvent taskCompletedEvent = new TaskCompletedEvent(tasks.get(task), task, status.isSuccess());
                     it.remove();
                     EntityRef client = charEnt.getOwner();
-                    client.send(new TaskCompletedEvent(tasks.get(task), task, status.isSuccess()));
+                    client.send(taskCompletedEvent);
                 }
             }
         }
