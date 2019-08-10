@@ -20,7 +20,6 @@ import static org.terasology.logic.permission.PermissionManager.CHEAT_PERMISSION
 import static org.terasology.logic.permission.PermissionManager.DEBUG_PERMISSION;
 import static org.terasology.logic.permission.PermissionManager.NO_PERMISSION;
 
-import java.util.Map.Entry;
 import java.util.Optional;
 
 import org.terasology.entitySystem.systems.BaseComponentSystem;
@@ -29,7 +28,6 @@ import org.terasology.logic.console.commandSystem.annotations.Command;
 import org.terasology.logic.console.commandSystem.annotations.CommandParam;
 import org.terasology.registry.In;
 import org.terasology.tasks.Quest;
-import org.terasology.tasks.Status;
 import org.terasology.tasks.Task;
 
 /**
@@ -46,7 +44,7 @@ public class QuestCommands extends BaseComponentSystem {
         String result = "Quests:\n";
         for (Quest quest : questSystem.getQuests()) {
             result += quest.getShortName() + " (" + quest.getStatus() + ")\n";
-            for (Task task : quest.getAllTasks()) {
+            for (Task task : quest.getTaskGraph()) {
                 result += "    " + task.toString() + '\n';
             }
         }

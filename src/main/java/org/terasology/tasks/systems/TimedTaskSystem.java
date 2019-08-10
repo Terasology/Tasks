@@ -32,6 +32,7 @@ import org.terasology.registry.In;
 import org.terasology.tasks.Quest;
 import org.terasology.tasks.Status;
 import org.terasology.tasks.Task;
+import org.terasology.tasks.TaskGraph;
 import org.terasology.tasks.TimeConstraintTask;
 import org.terasology.tasks.events.StartTaskEvent;
 import org.terasology.tasks.events.TaskCompletedEvent;
@@ -62,7 +63,8 @@ public class TimedTaskSystem extends BaseComponentSystem implements UpdateSubscr
         Iterator<Entry<TimeConstraintTask, Quest>> it = questRefs.entrySet().iterator();
         while (it.hasNext()) {
             Entry<TimeConstraintTask, Quest> entry = it.next();
-            if (task.getDependencies().contains(entry.getKey())) {
+            TaskGraph taskGraph = entry.getValue().getTaskGraph();
+            if (taskGraph.getDependencies(task).contains(entry.getKey())) {
                 it.remove();
             }
         }
@@ -74,9 +76,15 @@ public class TimedTaskSystem extends BaseComponentSystem implements UpdateSubscr
         while (it.hasNext()) {
             Entry<TimeConstraintTask, Quest> entry = it.next();
             TimeConstraintTask task = entry.getKey();
-            Status prevStatus = task.getStatus();
-            task.setTime(time.getGameTime());
-            Status status = task.getStatus();
+
+            TaskGraph taskGraph = entry.getValue().getTaskGraph();
+            Status prevStatus = taskGraph.getTaskStatus(task);
+
+            if (prevStatus == Status.SUCCEEDED) {
+                task.setTime(time.getGameTime());
+            }
+
+            Status status = taskGraph.getTaskStatus(task);
             if (status != prevStatus && status.isComplete()) {
                 Quest quest = entry.getValue();
                 EntityRef entity = quest.getEntity();

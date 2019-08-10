@@ -16,9 +16,6 @@
 
 package org.terasology.tasks;
 
-import java.util.Collections;
-import java.util.List;
-
 import org.terasology.entitySystem.entity.EntityRef;
 
 /**
@@ -27,10 +24,10 @@ import org.terasology.entitySystem.entity.EntityRef;
 public class DefaultQuest implements Quest {
     private final String shortName;
     private final String description;
-    private final List<Task> tasks;
+    private final TaskGraph tasks;
     private final EntityRef entity;
 
-    public DefaultQuest(EntityRef entity, String shortName, String description, List<Task> tasks) {
+    public DefaultQuest(EntityRef entity, String shortName, String description, TaskGraph tasks) {
         this.entity = entity;
         this.shortName = shortName;
         this.description = description;
@@ -53,8 +50,8 @@ public class DefaultQuest implements Quest {
     }
 
     @Override
-    public List<Task> getAllTasks() {
-        return Collections.unmodifiableList(tasks);
+    public TaskGraph getTaskGraph() {
+        return tasks;
     }
 
     /**
@@ -65,7 +62,7 @@ public class DefaultQuest implements Quest {
     @Override
     public Status getStatus() {
         for (Task task : tasks) {
-            Status taskStatus = task.getStatus();
+            Status taskStatus = tasks.getTaskStatus(task);
             if (taskStatus == Status.FAILED) {
                 return Status.FAILED;
             }

@@ -30,6 +30,7 @@ import org.terasology.physics.events.CollideEvent;
 import org.terasology.tasks.GoToBeaconTask;
 import org.terasology.tasks.Quest;
 import org.terasology.tasks.Status;
+import org.terasology.tasks.TaskGraph;
 import org.terasology.tasks.components.QuestBeaconComponent;
 import org.terasology.tasks.events.StartTaskEvent;
 import org.terasology.tasks.events.TaskCompletedEvent;
@@ -64,11 +65,15 @@ public class QuestBeaconSystem extends BaseComponentSystem {
         while (it.hasNext()) {
             Entry<GoToBeaconTask, Quest> entry = it.next();
             GoToBeaconTask task = entry.getKey();
-            if (task.getTargetBeaconName().equals(component.beaconId)) {
-                Status prevStatus = task.getStatus();
-                task.targetReached();
+            if (task.getTargetBeaconId().equals(component.beaconId)) {
+                TaskGraph taskGraph = entry.getValue().getTaskGraph();
+                Status prevStatus = taskGraph.getTaskStatus(task);
 
-                Status status = task.getStatus();
+                if (prevStatus == Status.ACTIVE) {
+                    task.targetReached();
+                }
+
+                Status status = taskGraph.getTaskStatus(task);
                 if (prevStatus != status && status.isComplete()) {
                     TaskCompletedEvent taskCompletedEvent = new TaskCompletedEvent(tasks.get(task), task, status.isSuccess());
                     it.remove();

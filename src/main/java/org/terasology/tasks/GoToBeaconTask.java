@@ -20,15 +20,15 @@ import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
 
 public class GoToBeaconTask extends ModifiableTask {
 
-    private final String targetBeaconName;
+    private final String targetBeaconId;
 
-    private final ItemIcon icon = new ItemIcon();
+    private transient final ItemIcon icon = new ItemIcon();
 
-    private boolean targetReached;
+    private transient boolean targetReached;
 
-    public GoToBeaconTask(String id, String targetBeaconName) {
+    public GoToBeaconTask(String id, String targetBeaconId) {
         super(id);
-        this.targetBeaconName = targetBeaconName;
+        this.targetBeaconId = targetBeaconId;
 //        this.icon.setIcon(entity.getComponent(ItemComponent.class).icon);
     }
 
@@ -39,35 +39,29 @@ public class GoToBeaconTask extends ModifiableTask {
 
     @Override
     public String getDescription() {
-        return String.format("Go to %s", targetBeaconName);
+        return String.format("Go to %s", targetBeaconId);
     }
 
     /**
      * @return the name of beacon entity that the player needs to go to
      */
-    public String getTargetBeaconName() {
-        return targetBeaconName;
+    public String getTargetBeaconId() {
+        return targetBeaconId;
     }
 
     public void targetReached() {
-        if (getStatus() == Status.ACTIVE) {
-            targetReached = true;
-        }
+        targetReached = true;
     }
 
     @Override
     public Status getStatus() {
-        Status deps = getDependencyStatus();
-        if (deps == Status.SUCCEEDED) {
-            // it is not possible to fail this task
-            return targetReached ? Status.SUCCEEDED : Status.ACTIVE;
-        }
-        return deps;
+        // it is not possible to fail this task
+        return targetReached ? Status.SUCCEEDED : Status.ACTIVE;
     }
 
     @Override
     public String toString() {
-        return String.format("GoToBeaconTask [%s]", targetBeaconName);
+        return String.format("GoToBeaconTask [%s]", targetBeaconId);
     }
 }
 
