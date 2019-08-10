@@ -17,8 +17,8 @@ package org.terasology.tasks;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -28,7 +28,7 @@ import java.util.Set;
  * {@link Iterable} and iterates over all the tasks.
  */
 public class TaskGraph implements Iterable<Task> {
-    private final Map<Task, List<Task>> taskDependencies = new HashMap<>();
+    private final Map<Task, List<Task>> taskDependencies = new LinkedHashMap<>();
 
     public void add(Task task) {
         taskDependencies.put(task, new ArrayList<>());
@@ -96,6 +96,6 @@ public class TaskGraph implements Iterable<Task> {
 
     @Override
     public Iterator<Task> iterator() {
-        return taskDependencies.keySet().iterator();
+        return getTasks().iterator();
     }
 }
