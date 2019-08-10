@@ -19,14 +19,13 @@ import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.persistence.typeHandling.PersistedData;
+import org.terasology.persistence.typeHandling.PersistedDataMap;
 import org.terasology.persistence.typeHandling.PersistedDataSerializer;
 import org.terasology.persistence.typeHandling.TypeHandler;
-import org.terasology.persistence.typeHandling.inMemory.PersistedMap;
 import org.terasology.tasks.Task;
 import org.terasology.tasks.TaskGraph;
 
 import java.util.ArrayList;
-import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -91,7 +90,7 @@ public class TaskGraphTypeHandler extends TypeHandler<TaskGraph> {
             PersistedData dependencyData = taskData.remove(DEPENDENCY_FIELD);
             Optional<List<String>> dependencies = stringListHandler.deserialize(dependencyData);
 
-            Optional<Task> taskOptional = taskTypeHandler.deserialize(new PersistedMap(taskData));
+            Optional<Task> taskOptional = taskTypeHandler.deserialize(PersistedDataMap.of(taskData));
 
             if (!taskOptional.isPresent()) {
                 LOGGER.error("Could not deserialize a Task from {}", fullTaskData);
