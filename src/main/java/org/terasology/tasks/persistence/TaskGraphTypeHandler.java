@@ -87,8 +87,11 @@ public class TaskGraphTypeHandler extends TypeHandler<TaskGraph> {
                 taskData.put(entry.getKey(), entry.getValue());
             }
 
+            Optional<List<String>> dependencies = Optional.empty();
             PersistedData dependencyData = taskData.remove(DEPENDENCY_FIELD);
-            Optional<List<String>> dependencies = stringListHandler.deserialize(dependencyData);
+            if (dependencyData != null) {
+                dependencies = stringListHandler.deserialize(dependencyData);
+            }
 
             Optional<Task> taskOptional = taskTypeHandler.deserialize(PersistedDataMap.of(taskData));
 
