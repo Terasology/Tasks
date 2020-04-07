@@ -17,6 +17,7 @@ package org.terasology.tasks.gui;
 
 import java.util.List;
 
+import org.terasology.math.JomlUtil;
 import org.terasology.tasks.TaskGraph;
 import org.terasology.utilities.Assets;
 import org.terasology.math.geom.Rect2i;
@@ -111,7 +112,7 @@ public class QuestRenderer extends AbstractItemRenderer<Quest> {
             }
         }
         List<String> lines = TextLineBuilder.getLines(font, text, canvas.getRegion().width());
-        return font.getSize(lines);
+        return JomlUtil.from(font.getSize(lines));
     }
 
     private String getTitle(Quest quest) {
