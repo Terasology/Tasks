@@ -60,7 +60,9 @@ public class DefaultQuest implements Quest {
     }
 
     @Override
-    public List<StartingInventoryComponent.InventoryItem> getReward() {return reward;}
+    public List<StartingInventoryComponent.InventoryItem> getReward() {
+        return reward;
+    }
 
     /**
      * The quest fails if any task failed. Otherwise, the quest is active if any task is active. Otherwise,
