@@ -24,11 +24,14 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.event.Event;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.logic.common.ActivateEvent;
+import org.terasology.logic.inventory.StartingInventoryComponent;
+import org.terasology.registry.In;
 import org.terasology.registry.Share;
 import org.terasology.tasks.DefaultQuest;
 import org.terasology.tasks.Quest;
@@ -44,6 +47,7 @@ import org.terasology.tasks.events.TaskCompletedEvent;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ListMultimap;
+import org.terasology.world.block.entity.BlockCommands;
 
 /**
  * This controls the main logic of the quest, and defines what to do with a "quest card"
@@ -53,6 +57,9 @@ import com.google.common.collect.ListMultimap;
 public class QuestSystem extends BaseComponentSystem {
 
     private static final Logger logger = LoggerFactory.getLogger(QuestSystem.class);
+
+    @In
+    private BlockCommands commands;
 
     private final ListMultimap<EntityRef, Quest> quests = ArrayListMultimap.create();
     private final Collection<Quest> activeQuestView = Collections2.filter(quests.values(),
@@ -70,7 +77,7 @@ public class QuestSystem extends BaseComponentSystem {
         if (!beforeQuestEvent.isConsumed()) {
             TaskGraph taskGraph = questComp.tasks;
 
-            DefaultQuest quest = new DefaultQuest(entity, questComp.shortName, questComp.description, taskGraph);
+            DefaultQuest quest = new DefaultQuest(entity, questComp.shortName, questComp.description, taskGraph, questComp.reward);
             quests.put(entity, quest);
 
             for (Task task : taskGraph) {
@@ -97,6 +104,15 @@ public class QuestSystem extends BaseComponentSystem {
         }
         if (quest.getStatus().isComplete()) {
             entity.send(new QuestCompleteEvent(quest, quest.getStatus().isSuccess()));
+        }
+    }
+
+    @ReceiveEvent
+    public void reward(QuestCompleteEvent event, EntityRef entity) {
+        Quest quest = event.getQuest();
+        List<StartingInventoryComponent.InventoryItem> rewards = quest.getReward();
+        for (StartingInventoryComponent.InventoryItem item : rewards) {
+            commands.giveBlock(entity, item.uri, item.quantity, null);
         }
     }
 

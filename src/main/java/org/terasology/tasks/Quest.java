@@ -17,6 +17,9 @@
 package org.terasology.tasks;
 
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.logic.inventory.StartingInventoryComponent;
+
+import java.util.List;
 
 public interface Quest {
 
@@ -42,4 +45,10 @@ public interface Quest {
      * @return the target entity for this quest
      */
     EntityRef getEntity();
+
+    /**
+     *
+     * @return the reward attached to this quest
+     */
+    List<StartingInventoryComponent.InventoryItem> getReward();
 }

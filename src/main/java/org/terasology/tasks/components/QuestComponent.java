@@ -17,10 +17,14 @@
 package org.terasology.tasks.components;
 
 import org.terasology.entitySystem.Component;
+import org.terasology.logic.inventory.StartingInventoryComponent;
 import org.terasology.tasks.TaskGraph;
+
+import java.util.List;
 
 public class QuestComponent implements Component {
     public String shortName;
     public String description;
     public TaskGraph tasks;
+    public List<StartingInventoryComponent.InventoryItem> reward;
 }
