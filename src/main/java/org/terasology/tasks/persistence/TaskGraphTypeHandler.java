@@ -26,6 +26,7 @@ import org.terasology.tasks.Task;
 import org.terasology.tasks.TaskGraph;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -87,11 +88,10 @@ public class TaskGraphTypeHandler extends TypeHandler<TaskGraph> {
                 taskData.put(entry.getKey(), entry.getValue());
             }
 
-            Optional<List<String>> dependencies = Optional.empty();
-            PersistedData dependencyData = taskData.remove(DEPENDENCY_FIELD);
-            if (dependencyData != null) {
-                dependencies = stringListHandler.deserialize(dependencyData);
-            }
+            List<String> dependencies =
+                    Optional.ofNullable(taskData.remove(DEPENDENCY_FIELD))
+                    .flatMap(stringListHandler::deserialize)
+                    .orElse(Collections.emptyList());
 
             Optional<Task> taskOptional = taskTypeHandler.deserialize(PersistedDataMap.of(taskData));
 
@@ -102,17 +102,9 @@ public class TaskGraphTypeHandler extends TypeHandler<TaskGraph> {
 
             Task task = taskOptional.get();
 
-            if (!dependencies.isPresent()) {
-                LOGGER.error("Could not deserialize dependencies of form {} for Task with ID {}",
-                    dependencyData,
-                    task.getId());
-
-                continue;
-            }
-
             taskGraph.add(task);
             tasksByIds.put(task.getId(), task);
-            taskDependencyIds.put(task, dependencies.get());
+            taskDependencyIds.put(task, dependencies);
         }
 
         // Resolve task dependencies
