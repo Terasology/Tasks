@@ -15,24 +15,25 @@
  */
 package org.terasology.tasks.gui;
 
-import java.util.List;
-
-import org.terasology.math.JomlUtil;
-import org.terasology.tasks.TaskGraph;
-import org.terasology.utilities.Assets;
+import org.joml.Rectanglei;
+import org.joml.Vector2i;
 import org.terasology.math.geom.Rect2i;
-import org.terasology.math.geom.Vector2i;
-import org.terasology.rendering.FontColor;
-import org.terasology.rendering.assets.font.Font;
+import org.terasology.nui.Canvas;
+import org.terasology.nui.Color;
+import org.terasology.nui.FontColor;
+import org.terasology.nui.SubRegion;
+import org.terasology.nui.TextLineBuilder;
+import org.terasology.nui.asset.font.Font;
+import org.terasology.nui.itemRendering.AbstractItemRenderer;
+import org.terasology.nui.util.RectUtility;
 import org.terasology.rendering.assets.texture.TextureRegion;
-import org.terasology.rendering.nui.Canvas;
-import org.terasology.rendering.nui.Color;
-import org.terasology.rendering.nui.SubRegion;
-import org.terasology.rendering.nui.TextLineBuilder;
-import org.terasology.rendering.nui.itemRendering.AbstractItemRenderer;
 import org.terasology.tasks.Quest;
 import org.terasology.tasks.Status;
 import org.terasology.tasks.Task;
+import org.terasology.tasks.TaskGraph;
+import org.terasology.utilities.Assets;
+
+import java.util.List;
 
 /**
  * Renders quest entries as part of a list item.
@@ -53,7 +54,8 @@ public class QuestRenderer extends AbstractItemRenderer<Quest> {
         int width = font.getWidth(title);
         canvas.drawText(title);
 
-        Rect2i questIconRect = Rect2i.createFromMinAndSize(width + 4, 0, lineHeight, lineHeight);
+
+        Rectanglei questIconRect = RectUtility.createFromMinAndSize(width + 4, 0, lineHeight, lineHeight);
         TextureRegion questIcon = getIcon(quest.getStatus());
         canvas.drawTexture(questIcon, questIconRect);
 
@@ -62,8 +64,8 @@ public class QuestRenderer extends AbstractItemRenderer<Quest> {
         }
 
         // draw quest tasks only for active quests
-        int maxWidth = canvas.getRegion().width();
-        int maxHeight = canvas.getRegion().height();
+        int maxWidth = canvas.getRegion().lengthX();
+        int maxHeight = canvas.getRegion().lengthY();
 
         int y = lineHeight;
         TaskGraph taskGraph = quest.getTaskGraph();
@@ -71,7 +73,7 @@ public class QuestRenderer extends AbstractItemRenderer<Quest> {
             // draw task text first
             String taskText = getTaskText(task);
             List<String> lines = TextLineBuilder.getLines(font, taskText, maxWidth);
-            Rect2i taskTextRect = Rect2i.createFromMinAndMax(20, y, maxWidth, maxHeight);
+            Rectanglei taskTextRect = new Rectanglei(20, y, maxWidth, maxHeight);
 
             Status taskStatus = taskGraph.getTaskStatus(task);
 
@@ -82,14 +84,14 @@ public class QuestRenderer extends AbstractItemRenderer<Quest> {
             canvas.drawText(taskText, taskTextRect);
 
             // draw status icon
-            Rect2i statusIconRect = Rect2i.createFromMinAndSize(0, y, lineHeight, lineHeight).expand(-2, -2);
+            Rectanglei statusIconRect = RectUtility.expand(RectUtility.createFromMinAndSize(0, y, lineHeight, lineHeight), -2, -2);
             canvas.drawTexture(getIcon(taskStatus), statusIconRect);
 
             // draw task icon, if available
             int lastIdx = lines.size() - 1;
             String last = lines.get(lastIdx);
             y += lineHeight * lastIdx;
-            Rect2i taskIconRect = Rect2i.createFromMinAndSize(20 + font.getWidth(last) + 4, y, lineHeight, lineHeight);
+            Rectanglei taskIconRect = RectUtility.createFromMinAndSize(20 + font.getWidth(last) + 4, y, lineHeight, lineHeight);
             if (task.getIcon() != null) {
                 try (SubRegion ignored = canvas.subRegion(taskIconRect, false)) {
                     task.getIcon().onDraw(canvas);
@@ -100,20 +102,21 @@ public class QuestRenderer extends AbstractItemRenderer<Quest> {
     }
 
     @Override
-    public Vector2i getPreferredSize(Quest quest, Canvas canvas) {
+    public Vector2i getPreferredSize(Quest value, Canvas canvas) {
         Font font = canvas.getCurrentStyle().getFont();
-        String text = getTitle(quest);
+        String text = getTitle(value);
 
         // only tasks for active quests are explicitly listed
-        if (quest.getStatus() == Status.ACTIVE) {
-            for (Task task : quest.getTaskGraph()) {
+        if (value.getStatus() == Status.ACTIVE) {
+            for (Task task : value.getTaskGraph()) {
                 text += '\n';
                 text += getTaskText(task);
             }
         }
-        List<String> lines = TextLineBuilder.getLines(font, text, canvas.getRegion().width());
-        return JomlUtil.from(font.getSize(lines));
+        List<String> lines = TextLineBuilder.getLines(font, text, canvas.getRegion().lengthX());
+        return font.getSize(lines);
     }
+
 
     private String getTitle(Quest quest) {
         return String.format("%s: %s", quest.getShortName(), quest.getDescription());

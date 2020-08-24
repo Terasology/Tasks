@@ -20,10 +20,10 @@ import java.util.List;
 
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.logic.players.LocalPlayer;
+import org.terasology.nui.databinding.ReadOnlyBinding;
+import org.terasology.nui.widgets.UIList;
 import org.terasology.registry.In;
-import org.terasology.rendering.nui.databinding.ReadOnlyBinding;
 import org.terasology.rendering.nui.layers.hud.CoreHudWidget;
-import org.terasology.rendering.nui.widgets.UIList;
 import org.terasology.tasks.Quest;
 import org.terasology.tasks.systems.QuestSystem;
 
