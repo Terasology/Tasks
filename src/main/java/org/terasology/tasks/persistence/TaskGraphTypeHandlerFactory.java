@@ -1,27 +1,14 @@
-/*
- * Copyright 2019 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.tasks.persistence;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.terasology.persistence.typeHandling.RegisterTypeHandlerFactory;
-import org.terasology.persistence.typeHandling.TypeHandler;
-import org.terasology.persistence.typeHandling.TypeHandlerContext;
-import org.terasology.persistence.typeHandling.TypeHandlerFactory;
-import org.terasology.persistence.typeHandling.TypeHandlerLibrary;
+import org.terasology.engine.persistence.typeHandling.RegisterTypeHandlerFactory;
+import org.terasology.engine.persistence.typeHandling.TypeHandler;
+import org.terasology.engine.persistence.typeHandling.TypeHandlerContext;
+import org.terasology.engine.persistence.typeHandling.TypeHandlerFactory;
+import org.terasology.engine.persistence.typeHandling.TypeHandlerLibrary;
 import org.terasology.reflection.TypeInfo;
 import org.terasology.tasks.Task;
 import org.terasology.tasks.TaskGraph;
@@ -42,7 +29,8 @@ public class TaskGraphTypeHandlerFactory implements TypeHandlerFactory {
         TypeHandlerLibrary library = context.getTypeHandlerLibrary();
 
         Optional<TypeHandler<List<String>>> stringListHandler =
-            library.getTypeHandler(new TypeInfo<List<String>>() {});
+                library.getTypeHandler(new TypeInfo<List<String>>() {
+                });
 
         if (!stringListHandler.isPresent()) {
             LOGGER.error("No List<String> handler found");
@@ -52,7 +40,7 @@ public class TaskGraphTypeHandlerFactory implements TypeHandlerFactory {
         TypeHandler<Task> taskTypeHandler = library.getBaseTypeHandler(TypeInfo.of(Task.class));
 
         TaskGraphTypeHandler typeHandler = new TaskGraphTypeHandler(taskTypeHandler,
-            stringListHandler.get());
+                stringListHandler.get());
 
         return Optional.of((TypeHandler<T>) typeHandler);
     }

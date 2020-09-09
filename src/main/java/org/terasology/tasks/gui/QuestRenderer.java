@@ -1,23 +1,11 @@
-/*
- * Copyright 2015 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.tasks.gui;
 
 import org.joml.Rectanglei;
 import org.joml.Vector2i;
-import org.terasology.math.geom.Rect2i;
+import org.terasology.engine.rendering.assets.texture.TextureRegion;
+import org.terasology.engine.utilities.Assets;
 import org.terasology.nui.Canvas;
 import org.terasology.nui.Color;
 import org.terasology.nui.FontColor;
@@ -26,12 +14,10 @@ import org.terasology.nui.TextLineBuilder;
 import org.terasology.nui.asset.font.Font;
 import org.terasology.nui.itemRendering.AbstractItemRenderer;
 import org.terasology.nui.util.RectUtility;
-import org.terasology.rendering.assets.texture.TextureRegion;
 import org.terasology.tasks.Quest;
 import org.terasology.tasks.Status;
 import org.terasology.tasks.Task;
 import org.terasology.tasks.TaskGraph;
-import org.terasology.utilities.Assets;
 
 import java.util.List;
 
@@ -40,10 +26,10 @@ import java.util.List;
  */
 public class QuestRenderer extends AbstractItemRenderer<Quest> {
 
-    private TextureRegion questPending = Assets.getTextureRegion("Tasks:icons#QuestionMark").get();
-    private TextureRegion questActive = Assets.getTextureRegion("Tasks:icons#ExclamationMark").get();
-    private TextureRegion questSuccess = Assets.getTextureRegion("Tasks:icons#CheckMark").get();
-    private TextureRegion questFailed = Assets.getTextureRegion("Tasks:icons#CrossMark").get();
+    private final TextureRegion questPending = Assets.getTextureRegion("Tasks:icons#QuestionMark").get();
+    private final TextureRegion questActive = Assets.getTextureRegion("Tasks:icons#ExclamationMark").get();
+    private final TextureRegion questSuccess = Assets.getTextureRegion("Tasks:icons#CheckMark").get();
+    private final TextureRegion questFailed = Assets.getTextureRegion("Tasks:icons#CrossMark").get();
 
     @Override
     public void draw(Quest quest, Canvas canvas) {
@@ -84,14 +70,16 @@ public class QuestRenderer extends AbstractItemRenderer<Quest> {
             canvas.drawText(taskText, taskTextRect);
 
             // draw status icon
-            Rectanglei statusIconRect = RectUtility.expand(RectUtility.createFromMinAndSize(0, y, lineHeight, lineHeight), -2, -2);
+            Rectanglei statusIconRect = RectUtility.expand(RectUtility.createFromMinAndSize(0, y, lineHeight,
+                    lineHeight), -2, -2);
             canvas.drawTexture(getIcon(taskStatus), statusIconRect);
 
             // draw task icon, if available
             int lastIdx = lines.size() - 1;
             String last = lines.get(lastIdx);
             y += lineHeight * lastIdx;
-            Rectanglei taskIconRect = RectUtility.createFromMinAndSize(20 + font.getWidth(last) + 4, y, lineHeight, lineHeight);
+            Rectanglei taskIconRect = RectUtility.createFromMinAndSize(20 + font.getWidth(last) + 4, y, lineHeight,
+                    lineHeight);
             if (task.getIcon() != null) {
                 try (SubRegion ignored = canvas.subRegion(taskIconRect, false)) {
                     task.getIcon().onDraw(canvas);
@@ -128,16 +116,16 @@ public class QuestRenderer extends AbstractItemRenderer<Quest> {
 
     private TextureRegion getIcon(Status status) {
         switch (status) {
-        case PENDING:
-            return questPending;
-        case ACTIVE:
-            return questActive;
-        case FAILED:
-            return questFailed;
-        case SUCCEEDED:
-            return questSuccess;
-        default:
-            return Assets.getTextureRegion("engine:items#questionMark").get();
+            case PENDING:
+                return questPending;
+            case ACTIVE:
+                return questActive;
+            case FAILED:
+                return questFailed;
+            case SUCCEEDED:
+                return questSuccess;
+            default:
+                return Assets.getTextureRegion("engine:items#questionMark").get();
         }
     }
 }

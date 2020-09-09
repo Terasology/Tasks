@@ -1,33 +1,33 @@
 {
-    "type": "QuestHud",
-    "contents": {
-        "type" : "relativeLayout",
-        "contents" : [
-            {
-                "type": "columnLayout",
-                "skin": "quests",
-                "contents": [
-                    {
-                        "type": "UILabel",
-                        "id": "listTitle",
-                        "text": "Quests"
-                    },
-                    {
-                        "type": "UIList",
-                        "id": "questList"
-                    }
-                ],
-                "layoutInfo" : {
-                    "use-content-height" : true,
-                    "width" : 280,
-                    "position-left" : {
-                        "target" : "LEFT"
-                    },
-                    "position-vertical-center" : {
-                        "target" : "MIDDLE"
-                    }
-                }
-            }
-        ]
-    }
+  "type": "QuestHud",
+  "contents": {
+    "type": "relativeLayout",
+    "contents": [
+      {
+        "type": "columnLayout",
+        "skin": "quests",
+        "contents": [
+          {
+            "type": "UILabel",
+            "id": "listTitle",
+            "text": "Quests"
+          },
+          {
+            "type": "UIList",
+            "id": "questList"
+          }
+        ],
+        "layoutInfo": {
+          "use-content-height": true,
+          "width": 280,
+          "position-left": {
+            "target": "LEFT"
+          },
+          "position-vertical-center": {
+            "target": "MIDDLE"
+          }
+        }
+      }
+    ]
+  }
 }

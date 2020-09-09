@@ -1,27 +1,14 @@
-/*
- * Copyright 2019 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.tasks.persistence;
 
 import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.terasology.persistence.typeHandling.PersistedData;
-import org.terasology.persistence.typeHandling.PersistedDataMap;
-import org.terasology.persistence.typeHandling.PersistedDataSerializer;
-import org.terasology.persistence.typeHandling.TypeHandler;
+import org.terasology.engine.persistence.typeHandling.PersistedData;
+import org.terasology.engine.persistence.typeHandling.PersistedDataMap;
+import org.terasology.engine.persistence.typeHandling.PersistedDataSerializer;
+import org.terasology.engine.persistence.typeHandling.TypeHandler;
 import org.terasology.tasks.Task;
 import org.terasology.tasks.TaskGraph;
 
@@ -36,8 +23,8 @@ public class TaskGraphTypeHandler extends TypeHandler<TaskGraph> {
     private static final String DEPENDENCY_FIELD = "dependsOn";
     private static final Logger LOGGER = LoggerFactory.getLogger(TaskGraphTypeHandler.class);
 
-    private TypeHandler<Task> taskTypeHandler;
-    private TypeHandler<List<String>> stringListHandler;
+    private final TypeHandler<Task> taskTypeHandler;
+    private final TypeHandler<List<String>> stringListHandler;
 
     public TaskGraphTypeHandler(TypeHandler<Task> taskTypeHandler, TypeHandler<List<String>> stringListHandler) {
         this.taskTypeHandler = taskTypeHandler;
@@ -50,8 +37,8 @@ public class TaskGraphTypeHandler extends TypeHandler<TaskGraph> {
 
         for (Task task : taskGraph) {
             List<String> dependencies = taskGraph.getDependencies(task).stream()
-                                            .map(Task::getId)
-                                            .collect(Collectors.toList());
+                    .map(Task::getId)
+                    .collect(Collectors.toList());
 
             PersistedData taskData = taskTypeHandler.serialize(task, serializer);
 
@@ -90,8 +77,8 @@ public class TaskGraphTypeHandler extends TypeHandler<TaskGraph> {
 
             List<String> dependencies =
                     Optional.ofNullable(taskData.remove(DEPENDENCY_FIELD))
-                    .flatMap(stringListHandler::deserialize)
-                    .orElse(Collections.emptyList());
+                            .flatMap(stringListHandler::deserialize)
+                            .orElse(Collections.emptyList());
 
             Optional<Task> taskOptional = taskTypeHandler.deserialize(PersistedDataMap.of(taskData));
 
@@ -114,7 +101,7 @@ public class TaskGraphTypeHandler extends TypeHandler<TaskGraph> {
 
                 if (dependency == null) {
                     LOGGER.error("Could not find dependency with ID {} in Task graph",
-                        dependencyId);
+                            dependencyId);
                     continue;
                 }
 
