@@ -9,7 +9,7 @@ import org.terasology.engine.persistence.typeHandling.TypeHandler;
 import org.terasology.engine.persistence.typeHandling.TypeHandlerContext;
 import org.terasology.engine.persistence.typeHandling.TypeHandlerFactory;
 import org.terasology.engine.persistence.typeHandling.TypeHandlerLibrary;
-import org.terasology.reflection.TypeInfo;
+import org.terasology.nui.reflection.TypeInfo;
 import org.terasology.tasks.Task;
 import org.terasology.tasks.TaskGraph;
 
