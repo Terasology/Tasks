@@ -15,7 +15,7 @@
  */
 package org.terasology.tasks.gui;
 
-import org.joml.Rectanglei;
+import org.joml.primitives.Rectanglei;
 import org.joml.Vector2i;
 import org.terasology.math.geom.Rect2i;
 import org.terasology.nui.Canvas;
