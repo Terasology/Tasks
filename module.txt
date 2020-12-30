@@ -1,14 +1,24 @@
 {
-    "id": "Tasks",
-    "version": "1.0.0",
-    "author": "nh_99, msteiger",
-    "displayName": "Tasks",
-    "description": "A module to add some questing features to the game.",
-    "dependencies": [
-        { "id": "Inventory", "minVersion": "1.1.0" },
-        { "id": "ItemRendering", "minVersion": "1.1.0" },
-        { "id": "ModuleTestingEnvironment", "minVersion": "0.2.0", "optional": true }
-    ],
-    "isServerSideOnly": false,
-    "isAugmentation": true
+  "id": "Tasks",
+  "version": "1.1.0-SNAPSHOT",
+  "author": "nh_99, msteiger",
+  "displayName": "Tasks",
+  "description": "A module to add some questing features to the game.",
+  "dependencies": [
+    {
+      "id": "Inventory",
+      "minVersion": "1.1.0"
+    },
+    {
+      "id": "ItemRendering",
+      "minVersion": "1.1.0"
+    },
+    {
+      "id": "ModuleTestingEnvironment",
+      "minVersion": "0.2.0",
+      "optional": true
+    }
+  ],
+  "isServerSideOnly": false,
+  "isAugmentation": true
 }
