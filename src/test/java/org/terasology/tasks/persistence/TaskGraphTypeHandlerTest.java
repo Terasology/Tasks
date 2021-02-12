@@ -15,13 +15,12 @@
  */
 package org.terasology.tasks.persistence;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.terasology.moduletestingenvironment.ModuleTestingEnvironment;
 import org.terasology.persistence.typeHandling.TypeHandler;
 import org.terasology.persistence.typeHandling.TypeHandlerLibrary;
@@ -34,12 +33,11 @@ import org.terasology.tasks.TaskGraph;
 import org.terasology.tasks.TimeConstraintTask;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TaskGraphTypeHandlerTest extends ModuleTestingEnvironment {
     private static final GsonPersistedDataSerializer SERIALIZER = new GsonPersistedDataSerializer();
@@ -56,7 +54,7 @@ public class TaskGraphTypeHandlerTest extends ModuleTestingEnvironment {
     private String serialize(TaskGraph action) {
         TypeHandler<TaskGraph> taskGraphTypeHandler = getHostContext().get(TypeHandlerLibrary.class)
                                                           .getTypeHandler(TaskGraph.class).get();
-        
+
         GsonPersistedData serialized =
             (GsonPersistedData) taskGraphTypeHandler.serialize(action, SERIALIZER);
         return GSON.toJson(serialized.getElement());
@@ -65,7 +63,7 @@ public class TaskGraphTypeHandlerTest extends ModuleTestingEnvironment {
     private TaskGraph deserialize(String json) {
         TypeHandler<TaskGraph> taskGraphTypeHandler = getHostContext().get(TypeHandlerLibrary.class)
                                                           .getTypeHandler(TaskGraph.class).get();
-        
+
         GsonPersistedData data = new GsonPersistedData(GSON.fromJson(json, JsonElement.class));
         return taskGraphTypeHandler.deserializeOrThrow(data);
     }
