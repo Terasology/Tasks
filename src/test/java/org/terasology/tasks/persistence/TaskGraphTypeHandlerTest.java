@@ -36,7 +36,7 @@ public class TaskGraphTypeHandlerTest {
     private static final Gson GSON = new GsonBuilder().create();
 
     private static final String JSON =
-        "[{\"class\":\"Tasks:CollectBlocksTask\",\"targetAmount\":50,\"itemId\":\"someOtherItem\",\"id\":\"collectB\",\"dependsOn\":[\"time\"]},{\"class\":\"Tasks:TimeConstraintTask\",\"targetTime\":15.0,\"id\":\"time\",\"dependsOn\":[\"collectA\",\"goTo\"]},{\"class\":\"Tasks:CollectBlocksTask\",\"targetAmount\":100,\"itemId\":\"someItem\",\"id\":\"collectA\",\"dependsOn\":[]},{\"class\":\"Tasks:GoToBeaconTask\",\"targetBeaconId\":\"beacon\",\"id\":\"goTo\",\"dependsOn\":[]}]";
+        "[{\"class\":\"org.terasology.tasks.CollectBlocksTask\",\"targetAmount\":50,\"itemId\":\"someOtherItem\",\"id\":\"collectB\",\"dependsOn\":[\"time\"]},{\"class\":\"org.terasology.tasks.TimeConstraintTask\",\"targetTime\":15.0,\"id\":\"time\",\"dependsOn\":[\"collectA\",\"goTo\"]},{\"class\":\"org.terasology.tasks.CollectBlocksTask\",\"targetAmount\":100,\"itemId\":\"someItem\",\"id\":\"collectA\",\"dependsOn\":[]},{\"class\":\"org.terasology.tasks.GoToBeaconTask\",\"targetBeaconId\":\"beacon\",\"id\":\"goTo\",\"dependsOn\":[]}]";
 
     @In
     private TypeHandlerLibrary handlers;
