@@ -1,18 +1,5 @@
-/*
- * Copyright 2019 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2021 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.tasks.persistence;
 
 import com.google.common.collect.Maps;
@@ -21,11 +8,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import org.junit.jupiter.api.Test;
-import org.terasology.moduletestingenvironment.ModuleTestingEnvironment;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.terasology.moduletestingenvironment.MTEExtension;
+import org.terasology.moduletestingenvironment.extension.Dependencies;
 import org.terasology.persistence.typeHandling.TypeHandler;
 import org.terasology.persistence.typeHandling.TypeHandlerLibrary;
 import org.terasology.persistence.typeHandling.gson.GsonPersistedData;
 import org.terasology.persistence.typeHandling.gson.GsonPersistedDataSerializer;
+import org.terasology.registry.In;
 import org.terasology.tasks.CollectBlocksTask;
 import org.terasology.tasks.GoToBeaconTask;
 import org.terasology.tasks.Task;
@@ -39,30 +29,29 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class TaskGraphTypeHandlerTest extends ModuleTestingEnvironment {
+@ExtendWith(MTEExtension.class)
+@Dependencies("Tasks")
+public class TaskGraphTypeHandlerTest {
     private static final GsonPersistedDataSerializer SERIALIZER = new GsonPersistedDataSerializer();
     private static final Gson GSON = new GsonBuilder().create();
 
     private static final String JSON =
-        "[{\"class\":\"Tasks:CollectBlocksTask\",\"targetAmount\":50,\"itemId\":\"someOtherItem\",\"id\":\"collectB\",\"dependsOn\":[\"time\"]},{\"class\":\"Tasks:TimeConstraintTask\",\"targetTime\":15.0,\"id\":\"time\",\"dependsOn\":[\"collectA\",\"goTo\"]},{\"class\":\"Tasks:CollectBlocksTask\",\"targetAmount\":100,\"itemId\":\"someItem\",\"id\":\"collectA\",\"dependsOn\":[]},{\"class\":\"Tasks:GoToBeaconTask\",\"targetBeaconId\":\"beacon\",\"id\":\"goTo\",\"dependsOn\":[]}]";
+        "[{\"class\":\"org.terasology.tasks.CollectBlocksTask\",\"targetAmount\":50,\"itemId\":\"someOtherItem\",\"id\":\"collectB\",\"dependsOn\":[\"time\"]},{\"class\":\"org.terasology.tasks.TimeConstraintTask\",\"targetTime\":15.0,\"id\":\"time\",\"dependsOn\":[\"collectA\",\"goTo\"]},{\"class\":\"org.terasology.tasks.CollectBlocksTask\",\"targetAmount\":100,\"itemId\":\"someItem\",\"id\":\"collectA\",\"dependsOn\":[]},{\"class\":\"org.terasology.tasks.GoToBeaconTask\",\"targetBeaconId\":\"beacon\",\"id\":\"goTo\",\"dependsOn\":[]}]";
 
-    @Override
-    public Set<String> getDependencies() {
-        return Sets.newHashSet("Tasks");
-    }
+    @In
+    private TypeHandlerLibrary handlers;
 
     private String serialize(TaskGraph action) {
-        TypeHandler<TaskGraph> taskGraphTypeHandler = getHostContext().get(TypeHandlerLibrary.class)
-                                                          .getTypeHandler(TaskGraph.class).get();
+        TypeHandler<TaskGraph> taskGraphTypeHandler = handlers.getTypeHandler(TaskGraph.class).get();
 
         GsonPersistedData serialized =
             (GsonPersistedData) taskGraphTypeHandler.serialize(action, SERIALIZER);
         return GSON.toJson(serialized.getElement());
     }
 
+    @SuppressWarnings("SameParameterValue")
     private TaskGraph deserialize(String json) {
-        TypeHandler<TaskGraph> taskGraphTypeHandler = getHostContext().get(TypeHandlerLibrary.class)
-                                                          .getTypeHandler(TaskGraph.class).get();
+        TypeHandler<TaskGraph> taskGraphTypeHandler = handlers.getTypeHandler(TaskGraph.class).get();
 
         GsonPersistedData data = new GsonPersistedData(GSON.fromJson(json, JsonElement.class));
         return taskGraphTypeHandler.deserializeOrThrow(data);
