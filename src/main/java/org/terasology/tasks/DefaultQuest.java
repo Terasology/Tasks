@@ -17,6 +17,9 @@
 package org.terasology.tasks;
 
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.logic.inventory.StartingInventoryComponent;
+
+import java.util.List;
 
 /**
  *
@@ -26,12 +29,14 @@ public class DefaultQuest implements Quest {
     private final String description;
     private final TaskGraph tasks;
     private final EntityRef entity;
+    private final List<StartingInventoryComponent.InventoryItem> reward;
 
-    public DefaultQuest(EntityRef entity, String shortName, String description, TaskGraph tasks) {
+    public DefaultQuest(EntityRef entity, String shortName, String description, TaskGraph tasks, List<StartingInventoryComponent.InventoryItem> reward) {
         this.entity = entity;
         this.shortName = shortName;
         this.description = description;
         this.tasks = tasks;
+        this.reward = reward;
     }
 
     @Override
@@ -52,6 +57,11 @@ public class DefaultQuest implements Quest {
     @Override
     public TaskGraph getTaskGraph() {
         return tasks;
+    }
+
+    @Override
+    public List<StartingInventoryComponent.InventoryItem> getReward() {
+        return reward;
     }
 
     /**
