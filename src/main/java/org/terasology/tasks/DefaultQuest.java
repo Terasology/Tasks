@@ -16,7 +16,7 @@
 
 package org.terasology.tasks;
 
-import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.entity.EntityRef;
 
 /**
  *

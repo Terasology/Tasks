@@ -25,12 +25,12 @@ import org.terasology.nui.TextLineBuilder;
 import org.terasology.nui.asset.font.Font;
 import org.terasology.nui.itemRendering.AbstractItemRenderer;
 import org.terasology.nui.util.RectUtility;
-import org.terasology.rendering.assets.texture.TextureRegion;
+import org.terasology.engine.rendering.assets.texture.TextureRegion;
 import org.terasology.tasks.Quest;
 import org.terasology.tasks.Status;
 import org.terasology.tasks.Task;
 import org.terasology.tasks.TaskGraph;
-import org.terasology.utilities.Assets;
+import org.terasology.engine.utilities.Assets;
 
 import java.util.List;
 

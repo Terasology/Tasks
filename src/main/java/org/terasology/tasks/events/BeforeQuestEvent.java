@@ -16,7 +16,7 @@
 
 package org.terasology.tasks.events;
 
-import org.terasology.entitySystem.event.AbstractConsumableEvent;
+import org.terasology.engine.entitySystem.event.AbstractConsumableEvent;
 
 /**
  * Event triggered before addition of new quest. This event is sent to the quest entity to allow

@@ -16,7 +16,7 @@
 
 package org.terasology.tasks.components;
 
-import org.terasology.entitySystem.Component;
+import org.terasology.engine.entitySystem.Component;
 import org.terasology.tasks.TaskGraph;
 
 public class QuestComponent implements Component {

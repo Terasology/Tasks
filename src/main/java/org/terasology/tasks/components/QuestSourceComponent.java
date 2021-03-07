@@ -15,8 +15,8 @@
  */
 package org.terasology.tasks.components;
 
-import org.terasology.entitySystem.Component;
-import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.Component;
+import org.terasology.engine.entitySystem.entity.EntityRef;
 
 public class QuestSourceComponent implements Component {
     public EntityRef source;

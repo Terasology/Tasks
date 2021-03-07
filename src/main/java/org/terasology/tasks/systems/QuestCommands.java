@@ -16,17 +16,17 @@
 
 package org.terasology.tasks.systems;
 
-import static org.terasology.logic.permission.PermissionManager.CHEAT_PERMISSION;
-import static org.terasology.logic.permission.PermissionManager.DEBUG_PERMISSION;
-import static org.terasology.logic.permission.PermissionManager.NO_PERMISSION;
+import static org.terasology.engine.logic.permission.PermissionManager.CHEAT_PERMISSION;
+import static org.terasology.engine.logic.permission.PermissionManager.DEBUG_PERMISSION;
+import static org.terasology.engine.logic.permission.PermissionManager.NO_PERMISSION;
 
 import java.util.Optional;
 
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.logic.console.commandSystem.annotations.Command;
-import org.terasology.logic.console.commandSystem.annotations.CommandParam;
-import org.terasology.registry.In;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.logic.console.commandSystem.annotations.Command;
+import org.terasology.engine.logic.console.commandSystem.annotations.CommandParam;
+import org.terasology.engine.registry.In;
 import org.terasology.tasks.Quest;
 import org.terasology.tasks.Task;
 

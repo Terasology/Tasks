@@ -15,7 +15,7 @@ import org.terasology.persistence.typeHandling.TypeHandler;
 import org.terasology.persistence.typeHandling.TypeHandlerLibrary;
 import org.terasology.persistence.typeHandling.gson.GsonPersistedData;
 import org.terasology.persistence.typeHandling.gson.GsonPersistedDataSerializer;
-import org.terasology.registry.In;
+import org.terasology.engine.registry.In;
 import org.terasology.tasks.CollectBlocksTask;
 import org.terasology.tasks.GoToBeaconTask;
 import org.terasology.tasks.Task;

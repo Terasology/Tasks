@@ -19,7 +19,7 @@ package org.terasology.tasks.components;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.terasology.entitySystem.Component;
+import org.terasology.engine.entitySystem.Component;
 
 /**
  * Provides a list of available quests.

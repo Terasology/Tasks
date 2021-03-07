@@ -16,7 +16,7 @@
 
 package org.terasology.tasks.components;
 
-import org.terasology.entitySystem.Component;
+import org.terasology.engine.entitySystem.Component;
 
 public class QuestBeaconComponent implements Component {
     public String beaconId;

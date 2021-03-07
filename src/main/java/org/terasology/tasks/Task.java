@@ -3,7 +3,7 @@
 
 package org.terasology.tasks;
 
-import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
+import org.terasology.engine.rendering.nui.layers.ingame.inventory.ItemIcon;
 
 public interface Task {
 
