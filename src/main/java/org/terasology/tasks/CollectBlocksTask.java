@@ -16,7 +16,7 @@
 
 package org.terasology.tasks;
 
-import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
+import org.terasology.module.inventory.ui.ItemIcon;
 
 public class CollectBlocksTask extends ModifiableTask {
 
