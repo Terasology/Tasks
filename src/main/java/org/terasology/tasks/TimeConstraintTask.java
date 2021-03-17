@@ -17,7 +17,7 @@
 package org.terasology.tasks;
 
 import org.terasology.math.TeraMath;
-import org.terasology.engine.rendering.nui.layers.ingame.inventory.ItemIcon;
+import org.terasology.module.inventory.ui.ItemIcon;
 
 /**
  * This task is successful until the given time runs out.

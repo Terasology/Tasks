@@ -16,7 +16,7 @@
 
 package org.terasology.tasks;
 
-import org.terasology.engine.rendering.nui.layers.ingame.inventory.ItemIcon;
+import org.terasology.module.inventory.ui.ItemIcon;
 
 public class GoToBeaconTask extends ModifiableTask {
 

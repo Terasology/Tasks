@@ -16,14 +16,14 @@
 
 package org.terasology.tasks;
 
-import org.terasology.engine.rendering.nui.layers.ingame.inventory.ItemIcon;
+import org.terasology.module.inventory.ui.ItemIcon;
 
 public class CollectBlocksTask extends ModifiableTask {
 
     private final int targetAmount;
     private final String itemId;
 
-    private transient final ItemIcon icon = new ItemIcon();
+    private final transient ItemIcon icon = new ItemIcon();
 
     private transient int amount;
 
