@@ -7,6 +7,7 @@ import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.terasology.engine.persistence.typeHandling.gson.GsonPersistedData;
@@ -31,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MTEExtension.class)
 @Dependencies("Tasks")
+@Tag("MteTest")
 public class TaskGraphTypeHandlerTest {
     private static final GsonPersistedDataSerializer SERIALIZER = new GsonPersistedDataSerializer();
     private static final Gson GSON = new GsonBuilder().create();
