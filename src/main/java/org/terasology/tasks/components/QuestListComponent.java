@@ -14,4 +14,10 @@ import java.util.List;
 public final class QuestListComponent implements Component<QuestListComponent> {
 
     public List<String> questItems = new ArrayList<>();
+
+    @Override
+    public void copy(QuestListComponent other) {
+        this.questItems.clear();
+        this.questItems.addAll(other.questItems);
+    }
 }

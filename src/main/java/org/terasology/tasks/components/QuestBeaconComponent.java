@@ -7,4 +7,9 @@ import org.terasology.gestalt.entitysystem.component.Component;
 
 public class QuestBeaconComponent implements Component<QuestBeaconComponent> {
     public String beaconId;
+
+    @Override
+    public void copy(QuestBeaconComponent other) {
+        this.beaconId = other.beaconId;
+    }
 }
