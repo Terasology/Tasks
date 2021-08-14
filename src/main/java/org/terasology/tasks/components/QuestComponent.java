@@ -12,7 +12,7 @@ public class QuestComponent implements Component<QuestComponent> {
     public TaskGraph tasks;
 
     @Override
-    public void copy(QuestComponent other) {
+    public void copyFrom(QuestComponent other) {
         this.shortName = other.shortName;
         this.description = other.description;
         this.tasks = other.tasks;

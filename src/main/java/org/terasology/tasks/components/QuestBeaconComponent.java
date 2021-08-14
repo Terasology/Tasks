@@ -9,7 +9,7 @@ public class QuestBeaconComponent implements Component<QuestBeaconComponent> {
     public String beaconId;
 
     @Override
-    public void copy(QuestBeaconComponent other) {
+    public void copyFrom(QuestBeaconComponent other) {
         this.beaconId = other.beaconId;
     }
 }

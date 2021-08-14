@@ -16,7 +16,7 @@ public class QuestSourceComponent implements Component<QuestSourceComponent> {
     }
 
     @Override
-    public void copy(QuestSourceComponent other) {
+    public void copyFrom(QuestSourceComponent other) {
         this.source = other.source;
     }
 }
