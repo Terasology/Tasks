@@ -16,7 +16,7 @@
 
 package org.terasology.tasks.events;
 
-import org.terasology.engine.entitySystem.event.Event;
+import org.terasology.gestalt.entitysystem.event.Event;
 import org.terasology.tasks.Quest;
 
 /**
