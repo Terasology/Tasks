@@ -17,11 +17,11 @@
 package org.terasology.tasks.systems;
 
 import org.terasology.engine.entitySystem.entity.EntityRef;
-import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.physics.events.CollideEvent;
+import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
 import org.terasology.tasks.GoToBeaconTask;
 import org.terasology.tasks.Quest;
 import org.terasology.tasks.Status;
