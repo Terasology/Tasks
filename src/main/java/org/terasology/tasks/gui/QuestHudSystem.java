@@ -7,9 +7,9 @@ import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
-import org.terasology.joml.geom.Rectanglef;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.rendering.nui.NUIManager;
+import org.terasology.joml.geom.Rectanglef;
 
 @RegisterSystem(RegisterMode.CLIENT)
 public class QuestHudSystem extends BaseComponentSystem {

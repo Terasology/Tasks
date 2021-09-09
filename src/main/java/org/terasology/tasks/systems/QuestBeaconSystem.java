@@ -16,11 +16,6 @@
 
 package org.terasology.tasks.systems;
 
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
@@ -34,6 +29,11 @@ import org.terasology.tasks.TaskGraph;
 import org.terasology.tasks.components.QuestBeaconComponent;
 import org.terasology.tasks.events.StartTaskEvent;
 import org.terasology.tasks.events.TaskCompletedEvent;
+
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * This class is used for the quest beacons, to see where the player is in relation to the beacon.
