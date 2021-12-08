@@ -1,36 +1,18 @@
-/*
- * Copyright 2015 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2021 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 
 package org.terasology.tasks.systems;
 
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import org.terasology.engine.entitySystem.entity.EntityRef;
-import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
-import org.terasology.module.inventory.components.InventoryComponent;
 import org.terasology.engine.logic.inventory.ItemComponent;
+import org.terasology.engine.network.ClientComponent;
+import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
+import org.terasology.module.inventory.components.InventoryComponent;
 import org.terasology.module.inventory.events.InventorySlotChangedEvent;
 import org.terasology.module.inventory.events.InventorySlotStackSizeChangedEvent;
-import org.terasology.engine.network.ClientComponent;
 import org.terasology.tasks.CollectBlocksTask;
 import org.terasology.tasks.Quest;
 import org.terasology.tasks.Status;
@@ -38,15 +20,17 @@ import org.terasology.tasks.TaskGraph;
 import org.terasology.tasks.events.StartTaskEvent;
 import org.terasology.tasks.events.TaskCompletedEvent;
 
-/**
- *
- */
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class CollectBlocksTaskSystem extends BaseComponentSystem {
 
     private final Map<CollectBlocksTask, Quest> tasks = new LinkedHashMap<>();
 
-    @ReceiveEvent(components = {ClientComponent.class})
+    @ReceiveEvent(components = ClientComponent.class)
     public void onStartTask(StartTaskEvent event, EntityRef entity) {
         if (event.getTask() instanceof CollectBlocksTask) {
             CollectBlocksTask task = (CollectBlocksTask) event.getTask();
@@ -69,7 +53,7 @@ public class CollectBlocksTaskSystem extends BaseComponentSystem {
         tasks.remove(event.getTask());
     }
 
-    @ReceiveEvent(components = {InventoryComponent.class})
+    @ReceiveEvent(components = InventoryComponent.class)
     public void onInventoryChange(InventorySlotChangedEvent event, EntityRef charEntity) {
         ItemComponent newItem = event.getNewItem().getComponent(ItemComponent.class);
         if (newItem != null) {
@@ -82,7 +66,7 @@ public class CollectBlocksTaskSystem extends BaseComponentSystem {
         }
     }
 
-    @ReceiveEvent(components = {InventoryComponent.class})
+    @ReceiveEvent(components = InventoryComponent.class)
     public void onInventoryChange(InventorySlotStackSizeChangedEvent event, EntityRef charEntity) {
         InventoryComponent inventory = charEntity.getComponent(InventoryComponent.class);
         EntityRef itemRef = inventory.itemSlots.get(event.getSlot());
