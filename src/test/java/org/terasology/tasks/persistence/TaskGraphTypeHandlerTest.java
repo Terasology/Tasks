@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@IntegrationEnvironment(dependencies = {"Tasks"})
+@IntegrationEnvironment(dependencies = "Tasks")
 public class TaskGraphTypeHandlerTest {
     private static final GsonPersistedDataSerializer SERIALIZER = new GsonPersistedDataSerializer();
     private static final Gson GSON = new GsonBuilder().create();
