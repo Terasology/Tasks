@@ -50,8 +50,9 @@ public class TimedTaskSystem extends BaseComponentSystem implements UpdateSubscr
         Iterator<Entry<TimeConstraintTask, Quest>> it = questRefs.entrySet().iterator();
         while (it.hasNext()) {
             Entry<TimeConstraintTask, Quest> entry = it.next();
-            TaskGraph taskGraph = entry.getValue().getTaskGraph();
-            if (taskGraph.getDependencies(task).contains(entry.getKey())) {
+            Quest quest = entry.getValue();
+            TaskGraph taskGraph = quest.getTaskGraph();
+            if (quest.equals(event.getQuest()) || taskGraph.getDependencies(task).contains(entry.getKey())) {
                 it.remove();
             }
         }
