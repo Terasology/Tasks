@@ -16,6 +16,7 @@ import org.terasology.tasks.Status;
 import org.terasology.tasks.Task;
 import org.terasology.tasks.TaskGraph;
 import org.terasology.tasks.TimeConstraintTask;
+import org.terasology.tasks.events.QuestCompleteEvent;
 import org.terasology.tasks.events.StartTaskEvent;
 import org.terasology.tasks.events.TaskCompletedEvent;
 
@@ -55,6 +56,11 @@ public class TimedTaskSystem extends BaseComponentSystem implements UpdateSubscr
                 it.remove();
             }
         }
+    }
+
+    @ReceiveEvent
+    public void onQuestComplete(QuestCompleteEvent event, EntityRef entity) {
+        questRefs.values().removeIf(quest -> quest.equals(event.getQuest()));
     }
 
     @Override
